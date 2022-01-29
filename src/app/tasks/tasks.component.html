@@ -1,0 +1,10 @@
+<app-create class="task-row" (tasklist_create)="taskListHandle()"></app-create>
+<div class="task-row">
+  <h4>Task List</h4>
+  <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
+</div>
+<div class="task-row">
+  <h4>Task Over List</h4>
+  <app-list-over class="task-row" *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
+  </app-list-over>
+</div>
