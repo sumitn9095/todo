@@ -15,6 +15,11 @@ import {
 
 import { formatDate } from '@angular/common';
 
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
+import { HttpErrorResponse } from '@angular/common/http';
+
 export interface DialogData {
   tskOver: any[];
 }
@@ -26,6 +31,8 @@ export interface DialogData {
 export class TasksComponent implements OnInit {
   public tasks: any[] = [];
   public tasks_over: any[] = [];
+  public tasks_loaded: any = '';
+  public errorMsg: any;
   constructor(private _taskService: TasksService, private _dialog: MatDialog) {}
 
   openTasksOverDialog() {
@@ -52,6 +59,17 @@ export class TasksComponent implements OnInit {
     });
   }
 
+  catchError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      console.log('this is client side error');
+      this.errorMsg = `Error: ${error.error.message}`;
+    } else {
+      console.log('this is server side error');
+      this.errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
+    }
+    return throwError(this.errorMsg);
+  }
+
   delete_last(taskIdToDelete: number) {
     this._taskService.taskDelete(taskIdToDelete).subscribe((task: any) => {
       console.log(`${task} is deleted`);
@@ -66,30 +84,39 @@ export class TasksComponent implements OnInit {
   }
 
   task_list() {
-    this._taskService.tasks().subscribe((tasks: any) => {
-      if (tasks.body) {
-        this.tasks = [];
-        this.tasks_over = [];
-        tasks.body.filter((d: any) => {
-          if (d.isOver == false) {
-            this.tasks.push(d);
+    this._taskService.tasks().subscribe(
+      (tasks: any) => {
+        if (tasks.body) {
+          this.tasks = [];
+          this.tasks_over = [];
+          tasks.body.filter((d: any) => {
+            if (d.isOver == false) {
+              this.tasks.push(d);
 
-            // ------------------------------
-            let date1 = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
-            let date2 = formatDate(d.date, 'yyyy-MM-dd', 'en_US');
+              // ------------------------------
+              let date1 = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
+              let date2 = formatDate(d.date, 'yyyy-MM-dd', 'en_US');
 
-            if (date1 > date2) {
-              console.log(d.taskname, ' is ---date1 is greater----');
+              if (date1 > date2) {
+                console.log(d.taskname, ' is ---date1 is greater----');
+              } else {
+                console.log(d.taskname, ' is ---date1 is lesser-----');
+              }
             } else {
-              console.log(d.taskname, ' is ---date1 is lesser-----');
+              this.tasks_over.push(d);
             }
-          } else {
-            this.tasks_over.push(d);
-          }
-        });
-        this.tasks.reverse();
+          });
+          this.tasks.reverse();
+        }
+      },
+      (err: any) => {
+        this.tasks_loaded = 'err';
+        this.catchError(err);
+      },
+      () => {
+        this.tasks_loaded = 'success';
       }
-    });
+    );
     console.log('this.tasks 123 >', this.tasks);
   }
 
