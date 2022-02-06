@@ -1,4 +1,4 @@
-<div class="" *ngFor="let task of tasklist">
+<!-- <div class="" *ngFor="let task of tasklist">
   <span><input #task_inp_name type="text" [value]="task.taskname" /> -- {{ task.date | date:'short' }} -- {{ task._id }}
   </span>
   <div *ngIf="task.isOver; else task_not_over">
@@ -9,4 +9,34 @@
     <span><button (click)="task_edit(task._id,task_inp_name.value)">Edit</button></span>
     <span><button (click)="task_status(task._id, true)">Done</button></span>
   </ng-template>
+</div> -->
+
+
+
+<div class="tasklist" *ngFor="let task of tasklist">
+  <mat-card [ngClass]="{'listMatCard': isList}">
+    <mat-card-title>
+      <mat-form-field class="tasknameinp" appearance="fill">
+        <input matInput #task_inp_name type="text" [value]="task.taskname">
+      </mat-form-field>
+      <!-- <input #task_inp_name type="text" [value]="task.taskname" /> -->
+      <mat-card-actions *ngIf="task.isOver; else task_not_over" align="end">
+        <button mat-raised-button color="primary" (click)="task_status(task._id, false)">Resume</button>
+        <button mat-raised-button color="warn" [title]="task._id" (click)="task_delete(task._id)">Delete</button>
+      </mat-card-actions>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <span>ID : {{ task._id }}</span> <span *ngIf="task.date">Created at :
+        <span class="date"> {{ task.date | date:'short' }}</span></span>
+
+    </mat-card-subtitle>
+
+    <ng-template #task_not_over>
+      <mat-card-actions align="end">
+        <span><button mat-raised-button color="primary"
+            (click)="task_edit(task._id,task_inp_name.value)">Edit</button></span>
+        <span><button mat-raised-button color="accent" (click)="task_status(task._id, true)">Done</button></span>
+      </mat-card-actions>
+    </ng-template>
+  </mat-card>
 </div>

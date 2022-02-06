@@ -1,0 +1,26 @@
+mat-card {
+
+  mat-card-title,
+  mat-card-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+
+
+  border: 1px solid #666666;
+  margin: 0 0 10px 0;
+
+  &.listMatCard {
+    background-color: burlywood;
+  }
+
+  mat-card-actions {
+    padding: 0;
+  }
+
+  .date {
+    color: #333333;
+  }
+}

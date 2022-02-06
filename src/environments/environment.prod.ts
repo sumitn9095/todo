@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  app_url: 'http://localhost:3000/api/',
+  app_url: 'https://sumit-todo-server.herokuapp.com/api/',
 };

@@ -9,6 +9,7 @@ import { TasksService } from '../tasks.service';
 })
 export class CreateComponent implements OnInit {
   public task_add: any;
+  public value = '';
   @Output() public tasklist_create: any = new EventEmitter();
   constructor(private _fb: FormBuilder, private _taskService: TasksService) {
     this.task_add = this._fb.group({
@@ -23,6 +24,9 @@ export class CreateComponent implements OnInit {
     if (!this.task_add.valid) {
       return;
     }
+    console.log('this.task_add.value', this.task_add.value);
+    let createdDate = new Date();
+    this.task_add.value.date = createdDate;
     this._taskService.tasksAdd(this.task_add.value).subscribe(
       (next: any) => {
         console.log(next);

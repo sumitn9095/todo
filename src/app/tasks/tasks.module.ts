@@ -11,6 +11,14 @@ import { ListOverComponent } from './list-over/list-over.component';
 
 import { SharedModule } from './shared/shared.module';
 
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+
 @NgModule({
   declarations: [
     TasksComponent,
@@ -23,6 +31,13 @@ import { SharedModule } from './shared/shared.module';
     TasksRoutingModule,
     ReactiveFormsModule,
     SharedModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
 })
 export class TasksModule {}

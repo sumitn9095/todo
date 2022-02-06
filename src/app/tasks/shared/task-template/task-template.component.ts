@@ -9,6 +9,7 @@ import { TasksService } from 'src/app/tasks/tasks.service';
 export class TaskTemplateComponent implements OnInit {
   @Input() tasklist: any[] = [];
   @Input() noedit: any;
+  @Input() isList: boolean = false;
   @Output() taskEdit = new EventEmitter();
 
   constructor(private _taskService: TasksService) {}
