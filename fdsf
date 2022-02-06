@@ -1,0 +1,43 @@
+[33mcommit eef010dfc743f58554cbf2c24ea8b253e7f226d2[m[33m ([m[1;36mHEAD -> [m[1;32msimple[m[33m, [m[1;31morigin/simple[m[33m)[m
+Author: sumitn9095 <sumit.nirgude>
+Date:   Sun Feb 6 19:54:30 2022 +0530
+
+    Simple - new build
+
+[33mcommit 42b6c2906a2f80bacb0edcc0de405068943185fc[m
+Author: sumitn9095 <sumit.nirgude>
+Date:   Sun Feb 6 19:51:05 2022 +0530
+
+    HashLocationStrategy - added
+    Tasks route made default
+
+[33mcommit 418da7b9da0212f62a47b2781e67fbc963f43d6a[m
+Author: sumitn9095 <sumit.nirgude>
+Date:   Sun Feb 6 19:34:44 2022 +0530
+
+    A simple Todo Build created
+
+[33mcommit e513deddb6a4df3c554507f7e74f3950422e6656[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: sumitn9095 <sumit.nirgude>
+Date:   Sun Feb 6 19:26:23 2022 +0530
+
+    1. Create task name component - updated
+    2. Shared Modules - updated
+    3. Task Template - updated
+    4. Tasks - updated
+
+[33mcommit e9a15519aa011422665d5c45fa2f184a22a86f3b[m
+Author: Sumit_LY <sumit@lemonyellow.in>
+Date:   Sat Jan 29 19:37:57 2022 +0530
+
+    Project initialized
+    1. Create Task added.
+    2. Tasks listing added with :
+     a. List &  b. List Over   (components).
+    3. Task Template component created , a common for 'List' & 'List Over' components to use.
+
+[33mcommit f0c46b26842152f84e2a343e745dfcd949a7d4b7[m
+Author: Sumit_LY <sumit@lemonyellow.in>
+Date:   Tue Jan 25 07:22:33 2022 +0530
+
+    initial commit
