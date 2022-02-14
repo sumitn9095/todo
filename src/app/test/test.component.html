@@ -1,1 +1,17 @@
 <p>test works!</p>
+
+<button (click)="getRsData()">Check RS</button>
+
+<button (click)="getFirstUser()">Get first user only</button>
+
+<button #clickme>Click me - switchMap</button>
+
+<div>
+  <input #searchInp id="searchInp" type="text" value="" />
+</div>
+
+<div *ngIf="users">
+  <div class="" *ngFor="let user of users">
+    <div *ngIf="user"> {{ user?.id }} </div>
+  </div>
+</div>
