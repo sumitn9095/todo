@@ -1,0 +1,12 @@
+<div class="btn-actions">
+  <button mat-button mat-stroked-button color="primary" (click)="addDataToChart(0,'Tasks')">Show Tasks</button>
+  <button mat-button mat-stroked-button color="primary" (click)="addDataToChart(1,'Tasks Over')">Show Task Over</button>
+</div>
+<div class="flex">
+  <div class="flex-item">
+    <div style="display: block;">
+      <canvas baseChart width="500" height="200" [data]="lineChartData" [options]="lineChartOptions"
+        [type]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+    </div>
+  </div>
+</div>

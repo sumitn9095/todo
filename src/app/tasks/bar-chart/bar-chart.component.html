@@ -1,0 +1,15 @@
+<div>
+  <div class="btn-actions">
+    <button mat-button mat-stroked-button color="primary" (click)="addDataToChart(0,'Tasks')">Show Tasks</button>
+    <button mat-button mat-stroked-button color="primary" (click)="addDataToChart(1,'Tasks Over')">Show Task
+      Over</button>
+  </div>
+  <div>
+    <div style="display: block">
+      <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"
+        (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+      </canvas>
+    </div>
+
+  </div>
+</div>
