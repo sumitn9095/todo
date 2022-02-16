@@ -15,7 +15,66 @@ mat-card-actions {
   }
 }
 
+.header-bar {
+  margin-bottom: 40px;
 
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    app-create {
+      // width: calc(100% - 80px);
+      width: 100%;
+    }
+  }
+}
+
+
+.input-big {
+
+
+  mat-card {
+    background: transparent;
+    border: none;
+  }
+
+  form {
+    mat-form-field {
+      width: 100%;
+      text-align: left;
+      padding-right: 60px;
+    }
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.task_list,
+.input-big {
+  .mat-form-field {
+    margin-right: 20px;
+  }
+}
+
+.fluid-input {
+  .mat-form-field {
+    width: calc(100% - 120px);
+  }
+
+  width: calc(100%);
+}
+
+.input-priority {
+  width: 100px;
+}
+
+.input-search {
+  width: calc(100% - 220px);
+}
 
 .tasknameinp {
   .mat-form-field-infix {
@@ -32,4 +91,13 @@ mat-card-actions {
   input {
     font-size: 16px !important;
   }
+}
+
+
+
+.container {
+  display: block;
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
 }

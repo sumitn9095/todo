@@ -1,49 +1,98 @@
-<!-- <button mat-button (click)="openTasksOverDialog()">Task Over List</button> -->
-
-<div class="tasklist">
-  <app-create class="task-row" (tasklist_create)="taskListHandle()"></app-create>
+<div class="header-bar">
+  <mat-toolbar color="primary">
+    <div class="container">
+      <app-create class="" (tasklist_create)="taskListHandle()"></app-create>
+    </div>
+    <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartLine(userData)"
+      aria-label="icon-button with show_chart icon">
+      <mat-icon>show_chart</mat-icon>
+    </button>
+    <button mat-icon-button class="example-icon" title="Bar Chart" (click)="openChartBar(userData)"
+      aria-label="icon-button with bar_chart icon">
+      <mat-icon>bar_chart</mat-icon>
+    </button>
+  </mat-toolbar>
 </div>
-<div class="tasklist" *ngIf="tasks_loaded == 'success'; else tasks_not_loaded">
-  <div class="task-row">
-    <h4>Task List</h4>
-    <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
+
+<div class="tasks_main" *ngIf="tasks_loaded == 'success'; else tasks_not_loaded">
+  <div class="container">
+    <app-search (ev)="handleSearchTerm($event)"></app-search>
   </div>
-  <div class="task-row">
-    <h4>Task Over List</h4>
-    <app-list-over class="task-row" *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
-    </app-list-over>
+  <div class="task_details" *ngIf="is_task_details_displayed; else task_list">
+    <div class="container">
+      <div class="task-row">
+        <h4>Task List</h4>
+        <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
+      </div>
+      <div class="task-row">
+        <h4>Task Over List</h4>
+        <app-list-over *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
+        </app-list-over>
+      </div>
+    </div>
   </div>
+  <ng-template #task_list>
+    <div class="task_list">
+      <div class="container">
+        <div class="task-row">
+          <h4>Task List</h4>
+          <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
+        </div>
+        <div class="task-row">
+          <h4>Task Over List</h4>
+          <app-list-over *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
+          </app-list-over>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
 </div>
 <ng-template #tasks_not_loaded>
-  <div class="tasks_not_loaded tasklist">
-    <mat-card>
-      <mat-card-content>
-        <div *ngIf="tasks_loaded == 'err'; else tasks_loading">
-          {{ errorMsg | json}}
-        </div>
-        <ng-template #tasks_loading>
+  <div class="tasks_not_loaded ">
+    <div class="container">
+      <mat-card>
+        <mat-card-content>
+          <div *ngIf="tasks_loaded == 'err'; else tasks_loading">
+            {{ errorMsg | json}}
+          </div>
+          <ng-template #tasks_loading>
 
-          <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
-            <circle id="arc1" class="circle" cx="150" cy="150" r="120" opacity=".89" fill="none" stroke="#632b26"
-              stroke-width="12" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc2" class="circle" cx="150" cy="150" r="120" opacity=".49" fill="none" stroke="#632b26"
-              stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc3" class="circle" cx="150" cy="150" r="100" opacity=".49" fill="none" stroke="#632b26"
-              stroke-width="20" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc4" class="circle" cx="150" cy="150" r="120" opacity=".49" fill="none" stroke="#632b26"
-              stroke-width="30" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc5" class="circle" cx="150" cy="150" r="100" opacity=".89" fill="none" stroke="#632b26"
-              stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc6" class="circle" cx="150" cy="150" r="90" opacity=".49" fill="none" stroke="#632b26"
-              stroke-width="16" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc7" class="circle" cx="150" cy="150" r="90" opacity=".89" fill="none" stroke="#632b26"
-              stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
-            <circle id="arc8" class="circle" cx="150" cy="150" r="80" opacity=".79" fill="#4DD0E1" fill-opacity="0"
-              stroke="#632b26" stroke-width="8" stroke-linecap="square" stroke-opacity=".99213"
-              paint-order="fill markers stroke" />
-          </svg>
-        </ng-template>
-      </mat-card-content>
-    </mat-card>
+            <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+              <circle id="arc1" class="circle" cx="150" cy="150" r="120" opacity=".89" fill="none" stroke="#632b26"
+                stroke-width="12" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc2" class="circle" cx="150" cy="150" r="120" opacity=".49" fill="none" stroke="#632b26"
+                stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc3" class="circle" cx="150" cy="150" r="100" opacity=".49" fill="none" stroke="#632b26"
+                stroke-width="20" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc4" class="circle" cx="150" cy="150" r="120" opacity=".49" fill="none" stroke="#632b26"
+                stroke-width="30" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc5" class="circle" cx="150" cy="150" r="100" opacity=".89" fill="none" stroke="#632b26"
+                stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc6" class="circle" cx="150" cy="150" r="90" opacity=".49" fill="none" stroke="#632b26"
+                stroke-width="16" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc7" class="circle" cx="150" cy="150" r="90" opacity=".89" fill="none" stroke="#632b26"
+                stroke-width="8" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />
+              <circle id="arc8" class="circle" cx="150" cy="150" r="80" opacity=".79" fill="#4DD0E1" fill-opacity="0"
+                stroke="#632b26" stroke-width="8" stroke-linecap="square" stroke-opacity=".99213"
+                paint-order="fill markers stroke" />
+            </svg>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #userData class="">
+  <h1 mat-dialog-title>Task Priorities</h1>
+  <div mat-dialog-content>
+    <div *ngIf="chartType == 'line'">
+      <app-my-line-chart [opened]="tasksChartOpened"></app-my-line-chart>
+    </div>
+    <div *ngIf="chartType == 'bar'">
+      <app-bar-chart></app-bar-chart>
+    </div>
   </div>
 </ng-template>

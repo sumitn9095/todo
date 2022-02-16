@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { Task } from './task';
 import {
   HttpClient,
@@ -34,16 +34,8 @@ export class TasksService {
   // }
 
   tasksAdd(taskObj: Task): Observable<Task> {
-    // let header = new HttpHeaders();
-    // header.append('Content-type', 'multipart/form-data');
-    // const formData = new FormData();
-    // formData.append('name', taskObj.taskname);
-    // formData.append('remind', taskObj.date);
-    // let req = new HttpRequest('POST', `${this.uri}/add`, formData, {
-    //   headers: header,
-    // });
-    // return this._http.request(req);
     taskObj.isOver = false;
+    console.log('taskObj', taskObj);
     return this._http.post<Task>(`${this.uri}add`, taskObj);
   }
 
@@ -63,5 +55,9 @@ export class TasksService {
   taskDelete(taskIdToDelete: any): Observable<Task> {
     console.log(`task to be deleted is ${taskIdToDelete}`);
     return this._http.delete<Task>(`${this.uri}delete/${taskIdToDelete}`);
+  }
+
+  taskSearch(taskName: any): Observable<Task> {
+    return this._http.get<Task>(`${this.uri}`, { headers: this.header });
   }
 }

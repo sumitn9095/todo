@@ -15,6 +15,8 @@
 
 <div class="tasklist" *ngFor="let task of tasklist">
   <mat-card [ngClass]="{'listMatCard': isList}">
+    <div class="priority priority-{{task.priority}}" aria-label="Priority">
+    </div>
     <mat-card-title>
       <mat-form-field class="tasknameinp" appearance="fill">
         <input matInput #task_inp_name type="text" [value]="task.taskname">

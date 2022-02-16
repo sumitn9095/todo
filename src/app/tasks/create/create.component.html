@@ -1,22 +1,26 @@
-<mat-toolbar color="primary">
-  <form [formGroup]="task_add" (ngSubmit)="task_create()">
-    <mat-form-field class="example-form-field" appearance="fill">
-      <mat-label>Enter your Task name</mat-label>
-      <input matInput type="text" name="taskname" [(ngModel)]="value" formControlName="taskname" />
-      <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+<form class="input-big" [formGroup]="task_add" (ngSubmit)="task_create()">
+  <mat-form-field class="input-search" appearance="fill">
+    <mat-label>Enter your Task name</mat-label>
+    <input matInput type="text" [(ngModel)]="value" formControlName="taskname" />
+    <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field class="input-priority" appearance="fill">
+    <select matNativeControl [(ngModel)]="selectedPriority" name="priority" formControlName="priority">
+      <option *ngFor="let p of priorityList" [value]="p.value">
+        {{p.viewValue}}
+      </option>
+    </select>
+  </mat-form-field>
+  <!-- <input type="date" name="date" formControlName="date" /> -->
 
-    <!-- <input type="date" name="date" formControlName="date" /> -->
-
-    <!-- <mat-form-field appearance="fill">
+  <!-- <mat-form-field appearance="fill">
       <mat-label>Verbose datepicker</mat-label>
       <input matInput [matDatepicker]="dp" formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp></mat-datepicker>
     </mat-form-field> -->
 
-    <button mat-raised-button color="accent" type="submit">Create</button>
-  </form>
-</mat-toolbar>
+  <button mat-raised-button color="accent" type="submit">Create</button>
+</form>

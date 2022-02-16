@@ -1,4 +1,5 @@
 mat-card {
+  position: relative;
 
   mat-card-title,
   mat-card-subtitle {
@@ -7,7 +8,25 @@ mat-card {
     justify-content: space-between;
   }
 
+  .priority {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
 
+    &.priority-0 {
+      background-color: white;
+    }
+
+    &.priority-1 {
+      background-color: yellow;
+    }
+
+    &.priority-2 {
+      background-color: red;
+    }
+  }
 
   border: 1px solid #666666;
   margin: 0 0 10px 0;

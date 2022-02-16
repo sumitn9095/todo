@@ -1,0 +1,23 @@
+<form class="" [formGroup]="searchFormGroup">
+  <!-- <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>Enter your Search</mat-label>
+    <input #searchTerm matInput type="text" name="searchTerm" [(ngModel)]="searchValue" formControlName="searchTerm" />
+    <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field> -->
+
+  <mat-form-field class="fluid-input" appearance="fill">
+    <mat-label>Enter your Search</mat-label>
+    <input id="searchTerm" type="text" placeholder="Pick one" aria-label="Seach Term" [(ngModel)]="searchValue" matInput
+      formControlName="searchTerm" name="searchTerm" />
+    <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions" [value]="option.taskname" (click)="optionSelected(option._id)">
+        {{option.taskname}}
+      </mat-option>
+    </mat-autocomplete> -->
+  </mat-form-field>
+</form>
