@@ -7,8 +7,6 @@ import { Task } from '../task';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TasksService } from '../tasks.service';
 
-//import DataLabelsPlugin from 'chachartjs-';
-
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
@@ -130,11 +128,11 @@ export class BarChartComponent implements OnInit {
               backgroundColor: 'rgb(214,111,111)',
               borderColor: 'rgb(214,111,111)',
             };
+
+            console.log(this.task_name, this.task_over_name);
+
+            this.chart?.update();
           }
-
-          console.log(this.task_name, this.task_over_name);
-
-          this.chart?.update();
         }
       },
       (err: any) => {
