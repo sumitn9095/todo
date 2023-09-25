@@ -1,0 +1,8 @@
+<button type="button" (click)="fetchAll()">Fetch all Hobbies</button>
+<hr/>
+<div *ngFor="let s of hobbies">
+    <div>{{s.name}} - <a (click)="hobbyRemove(s._id)">remove</a></div>
+</div>
+<hr/>
+<input type="text" value="" [(ngModel)]="hobbyInp" placeholder="hobby">
+<button type="button" (click)="hobbyAdd()">Add Hobbies</button>

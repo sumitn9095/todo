@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-list-over',
@@ -7,8 +7,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ListOverComponent implements OnInit {
   @Input() tasklist_over: any;
-
+  @Output() selectedTaskId = new EventEmitter<any>();
   constructor() {}
-
   ngOnInit(): void {}
+  fetchDetailsById(id:any) {
+    if(id) this.selectedTaskId.emit(id);
+    if(id) console.log("selectedTaskId",id);
+  }
 }

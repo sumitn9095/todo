@@ -11,21 +11,31 @@ export class TaskTemplateComponent implements OnInit {
   @Input() noedit: any;
   @Input() isList: boolean = false;
   @Output() taskEdit = new EventEmitter();
+  @Output() taskId = new EventEmitter<any>();
+  public user:any;
 
   constructor(private _taskService: TasksService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = JSON.parse(sessionStorage.getItem('user') as any);
+  }
 
-  task_edit(taskId: string, newTaskName: any) {
-    this._taskService.taskEdit(taskId, newTaskName).subscribe(
-      (next: any) => {
-        console.log(next);
-      },
-      (error: Error) => {},
-      () => {
-        this._taskService.bs.next('task_edited');
-      }
-    );
+  checkDetails(id:any){
+    this.taskId.emit(id);
+  }
+
+  task_edit(taskId: string, newTaskName: any, task:any) {
+    let obj = {
+      email : this.user.email,
+      id: taskId,
+      newTaskName: newTaskName
+    }
+    console.log("task-edt",task);
+    this._taskService.userTaskEdit(obj).subscribe({
+      next: (w:any) => {console.log(w);},
+      error: (err:Error) => {},
+      complete:() => {this._taskService.bs.next('task_edited');}
+    });
   }
 
   task_delete(taskId: string) {
@@ -47,16 +57,16 @@ export class TaskTemplateComponent implements OnInit {
   // }
 
   task_status(taskId: string, isOver: boolean) {
-    this._taskService.taskStatus(taskId, isOver).subscribe(
-      (next: any) => {
-        console.log(next);
+    this._taskService.userTaskStatusChange(taskId, isOver).subscribe({
+      next: (w:any) => {
+        console.log(w);
       },
-      (error: Error) => {
+      error: (err:Error) => {
         console.error;
       },
-      () => {
+      complete: () => {
         this._taskService.bs.next('task_status_updated');
       }
-    );
+   } );
   }
 }

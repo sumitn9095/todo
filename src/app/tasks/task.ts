@@ -3,4 +3,5 @@ export interface Task {
   date: Date;
   isOver: Boolean;
   priority: Number;
+  email: String;
 }

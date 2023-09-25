@@ -3,6 +3,10 @@
     <div class="container">
       <app-create class="" (tasklist_create)="taskListHandle()"></app-create>
     </div>
+    <button mat-icon-button class="example-icon" title="Line Chart" (click)="signOut()"
+      aria-label="icon-button with show_chart icon">
+      <mat-icon>person</mat-icon>
+    </button>
     <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartLine(userData)"
       aria-label="icon-button with show_chart icon">
       <mat-icon>show_chart</mat-icon>
@@ -15,39 +19,28 @@
 </div>
 
 <div class="tasks_main" *ngIf="tasks_loaded == 'success'; else tasks_not_loaded">
-  <div class="container">
-    <app-search (ev)="handleSearchTerm($event)"></app-search>
-  </div>
-  <div class="task_details" *ngIf="is_task_details_displayed; else task_list">
     <div class="container">
-      <div class="task-row">
-        <h4>Task List</h4>
-        <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
-      </div>
-      <div class="task-row">
-        <h4>Task Over List</h4>
-        <app-list-over *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
-        </app-list-over>
-      </div>
+      <app-search (searchTerm)="getUserTasks($event)"></app-search>
     </div>
-  </div>
-  <ng-template #task_list>
     <div class="task_list">
       <div class="container">
         <div class="task-row">
           <h4>Task List</h4>
-          <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()"></app-list>
+          <!-- <app-list *ngIf="tasks" [tasklist]="tasks" (taskedited)="taskEditedHandle()" (selectedTaskId)="checkDetailsById($event)"></app-list> -->
+          <app-task-template  *ngIf="tasks"  [tasklist]="tasks" [isList]="true" (taskId)="checkDetailsById($event)"></app-task-template>
+
         </div>
         <div class="task-row">
           <h4>Task Over List</h4>
-          <app-list-over *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()">
-          </app-list-over>
+          <!-- <app-list-over *ngIf="tasks_over" [tasklist_over]="tasks_over" (taskedited)="taskEditedHandle()" (selectedTaskId)="checkDetailsById($event)">
+          </app-list-over> -->
+          <app-task-template *ngIf="tasks_over" [tasklist]="tasks_over" [noedit]="true" (taskId)="checkDetailsById($event)"></app-task-template>
+
         </div>
       </div>
     </div>
-  </ng-template>
-
 </div>
+
 <ng-template #tasks_not_loaded>
   <div class="tasks_not_loaded ">
     <div class="container">

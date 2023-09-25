@@ -32,22 +32,20 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {}
 
   task_create() {
+    var user = JSON.parse(sessionStorage.getItem('user') || {} as any);
     if (!this.task_add.valid) {
       return;
     }
-
     this.task_add.value.priority = Number(this.task_add.value.priority);
     let createdDate = new Date();
     this.task_add.value.date = createdDate;
     console.log('this.task_add.value', this.task_add.value);
-    this._taskService.tasksAdd(this.task_add.value).subscribe(
-      (next: any) => {
-        console.log(next);
-      },
-      (error: Error) => {},
-      () => {
-        this.tasklist_create.emit('get_task_list');
-      }
-    );
+    var obj = this.task_add.value;
+    obj.email = user.email;
+    this._taskService.userTaskAdd(obj).subscribe({
+      next: (w:any) => {console.log(w);},
+      error: (err:Error) => {},
+      complete: () => {this.tasklist_create.emit('get_task_list');}
+    });
   }
 }

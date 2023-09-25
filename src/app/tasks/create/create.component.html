@@ -1,17 +1,17 @@
 <form class="input-big" [formGroup]="task_add" (ngSubmit)="task_create()">
   <mat-form-field class="input-search" appearance="fill">
     <mat-label>Enter your Task name</mat-label>
-    <input matInput type="text" [(ngModel)]="value" formControlName="taskname" />
-    <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+    <input matInput title="Task Name" type="text" [(ngModel)]="value" formControlName="taskname" />
+    <button matSuffix mat-icon-button type="button" *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <mat-form-field class="input-priority" appearance="fill">
-    <select matNativeControl [(ngModel)]="selectedPriority" name="priority" formControlName="priority">
-      <option *ngFor="let p of priorityList" [value]="p.value">
+    <mat-select  title="Priority" [(ngModel)]="selectedPriority" name="priority" formControlName="priority">
+      <mat-option *ngFor="let p of priorityList" [value]="p.value">
         {{p.viewValue}}
-      </option>
-    </select>
+      </mat-option>
+    </mat-select>
   </mat-form-field>
   <!-- <input type="date" name="date" formControlName="date" /> -->
 

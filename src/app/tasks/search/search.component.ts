@@ -23,7 +23,7 @@ export class SearchComponent implements AfterViewInit {
   public options: any[] = ['qqq', 'www', 'rrr'];
   public st: any;
   public filteredOptions: any[] = [];
-  @Output() public ev = new EventEmitter<any[]>();
+  @Output() public searchTerm = new EventEmitter<string>();
   constructor(private _fb: FormBuilder, private _taskService: TasksService) {}
 
   // @ViewChild('searchTerm') 'searchTerm': ElementRef;
@@ -47,15 +47,16 @@ export class SearchComponent implements AfterViewInit {
         distinctUntilChanged()
       )
       .subscribe((searchedTerm) => {
-        //console.log('searchedTerm', searchedTerm);
-        this._taskService.taskSearch(searchedTerm).subscribe((data: any) => {
-          let fval = searchedTerm.toLowerCase();
-          console.log('taskSearch-taskSearch', data, fval);
-          this.filteredOptions = data.filter((x: any) =>
-            x.taskname.toLowerCase().includes(fval)
-          );
-          this.ev.emit(this.filteredOptions);
-        });
+        let st = searchedTerm.toLowerCase()
+        this.searchTerm.emit(st);
+        // this._taskService.taskSearch(searchedTerm).subscribe((data: any) => {
+        //   let fval = searchedTerm.toLowerCase();
+        //   console.log('taskSearch-taskSearch', data, fval);
+        //   this.filteredOptions = data.filter((x: any) =>
+        //     x.taskname.toLowerCase().includes(fval)
+        //   );
+        //   this.searchTerm.emit(this.filteredOptions);
+        // });
 
         // return this.options.filter((option) =>
         //   option.toLowerCase().includes(filterValue)
@@ -65,11 +66,11 @@ export class SearchComponent implements AfterViewInit {
 
   clearSearch() {
     this.searchValue = '';
-    this.ev.emit([false]);
+    this.searchTerm.emit('');
   }
 
   // optionSelected(task_id: number) {
-  //   this.ev.emit(task_id);
+  //   this.searchTerm.emit(task_id);
   //   console.log('optionSelected --', task_id);
   // }
 }

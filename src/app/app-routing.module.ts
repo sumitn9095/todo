@@ -5,13 +5,21 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./tasks/tasks.module').then((m) => m.TasksModule),
+      import('./auth/signin/signin.module').then((m) => m.SigninModule),
   },
   {
     path: 'tasks',
     loadChildren: () =>
       import('./tasks/tasks.module').then((m) => m.TasksModule),
   },
+  {
+    path: 'tasks/:slug',
+    loadChildren: () =>
+      import('./tasks/tasks.module').then((m) => m.TasksModule),
+  },
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+  { path: 'hobby', loadChildren: () => import('./hobby/hobby.module').then(m => m.HobbyModule) },
+  { path: 'category', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule) },
 ];
 
 @NgModule({

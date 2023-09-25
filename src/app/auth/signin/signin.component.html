@@ -1,0 +1,20 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title>Log In</mat-card-title>
+      </mat-card-header>
+      <form class="example-form" [formGroup]="signInForm" (ngSubmit)="submitSignInForm($event)">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Email" formControlName="email" >
+            <mat-error [hidden]="cn['email'].status == 'VALID'">Email is required</mat-error>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Password" formControlName="password">
+            <mat-error [hidden]="cn['password'].status == 'VALID'">Password is required</mat-error>
+          </mat-form-field>
+        </mat-card-content>
+        <button title="Signup" type="submit" mat-stroked-button color="accent" class="btn-block">Log In</button>
+      </form>
+    </mat-card>
+  </div>

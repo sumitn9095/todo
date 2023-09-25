@@ -1,9 +1,1 @@
-<!-- <div class="" *ngFor="let task of tasklist_over">
-  <span><input #task_inp_name type="text" [value]="task.taskname" /> -- {{ task.date | date:'short' }}</span>
-  <span *ngIf="task.isOver; else task_done_btn"><button (click)="task_status(task._id, false)">Resume</button></span>
-  <ng-template #task_done_btn>
-    <span *ngIf="!task.isOver"><button (click)="task_status(task._id, true)">Done</button></span></ng-template>
-</div> -->
-
-
-<app-task-template [tasklist]="tasklist_over" [noedit]="true"></app-task-template>
+<!-- <app-task-template [tasklist]="tasklist_over" [noedit]="true" (taskId)="fetchDetailsById($event)"></app-task-template> -->
