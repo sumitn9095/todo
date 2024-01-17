@@ -34,6 +34,9 @@ mat-card {
   &.listMatCard {
     background-color: burlywood;
   }
+  &.listMatCardToday {
+    background-color: rgb(119, 119, 197);
+  }
 
   mat-card-actions {
     padding: 0;

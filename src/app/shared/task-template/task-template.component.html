@@ -1,8 +1,9 @@
 
 <div  class="tasklist" *ngFor="let task of tasklist">
-  <mat-card [categoryRefForTask]="'s'" [ngClass]="{'listMatCard': isList}">
+  <mat-card [ngClass]="{'listMatCard': (isList == 'due'), 'listMatCardToday': (isList == 'today')}">
     <div class="priority priority-{{task.priority}}">
     </div>
+    <div><img title="Task Photo" [src]="env + task.imagePath" /></div>
     <mat-card-title>
         <div class="d-flex">
           <mat-form-field class="tasknameinp" appearance="fill">
@@ -21,21 +22,31 @@
       </mat-card-actions>
     </mat-card-title>
     <mat-card-subtitle>
-      <span *ngIf="task.taskDetails.length" class="content-start"> 
-        <mat-chip-list>
-          <mat-chip color="primary" *ngFor="let cat of task.taskDetails[0].category">
-            {{cat}}
-          </mat-chip>
-        </mat-chip-list>
-      </span>
-      <span class="flex content-between items center"> 
-        <!-- <span>
-            <span>ID : {{ task._id }}</span>
-        </span> -->
-        <span *ngIf="task.date">Created at :
-          <span class="date"> {{ task.date | date:'short' }}</span>
+      <div>
+        <div *ngIf="task.category !== undefined && task.category.length" class="content-start"> 
+          <mat-chip-list>
+            <mat-chip [categoryRefForTask]="cat" *ngFor="let cat of task.category">
+              <a (click)="goto(cat)">{{cat}}</a>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+      <div>
+        <span class="flex content-between items center"> 
+          <span *ngIf="task.date">
+            <span class="date"> {{ task.date | date:'d MMM y' }}</span>
+          </span>
+          <span> - </span>
+          <span *ngIf="task.dueDate">
+            <span class="date"> {{ task.dueDate | date:'d MMM y' }}</span>
+          </span>
         </span>
-      </span>
+        <span class="flex content-between items center">
+          <span *ngIf="isList == 'due'">{{isList == 'due' ? 'Due in' : ''}}&nbsp;</span>
+          {{ task.dueDate | daysremaining }} 
+          <span *ngIf="!isList">&nbsp;{{!isList ? 'ago expired' : ''}}</span>
+        </span>
+      </div>
     </mat-card-subtitle>
     <ng-template #task_not_over>
       <mat-card-actions align="end">

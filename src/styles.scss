@@ -1,7 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
+@import "~/node_modules/placeholder-loading/src/scss/placeholder-loading";
 html,
 body {
   height: 100%;
@@ -13,14 +13,34 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+
+.d-flex {display: flex;}
+.flex-basis-100 {
+  flex :1 1 100%;
+}
+.justify-start {justify-content: flex-start;}
+.justify-between {justify-content: space-between;}
+.justify-end {justify-content: flex-end;}
+
+.items-start {align-items: flex-start;}
+.items-center {align-items: center;}
+.items-end {align-items: flex-end;}
+
+.flex-column { flex-direction: column;}
+.flex-row { flex-direction: row;}
+
 mat-card-actions {
   button {
     margin-left: 10px !important;
   }
 }
 
+.tasks_main {
+  padding-top: 40px;
+}
+
 .header-bar {
-  margin-bottom: 40px;
+  //margin-bottom: 40px;
 
   .container {
     display: flex;

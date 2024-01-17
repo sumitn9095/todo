@@ -42,6 +42,7 @@ export class CreateComponent implements OnInit {
     console.log('this.task_add.value', this.task_add.value);
     var obj = this.task_add.value;
     obj.email = user.email;
+    obj.imagePath = "";
     this._taskService.userTaskAdd(obj).subscribe({
       next: (w:any) => {console.log(w);},
       error: (err:Error) => {},

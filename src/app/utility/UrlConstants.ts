@@ -12,6 +12,8 @@ export class UrlConstants {
     public static userTaskInfoAndDetail: string = "usertaskinfoanddetail";
     public static userTaskDetail: string = "usertaskdetail";
     public static userTaskDetailsSave: string = "usertaskdetailssave";
+    public static downloadTasks: string = "downloadTasks";
+    public static uploadTasks: string = "uploadTasks";
     // Categories
     public static userCategories: string = "usercategories";
     public static userCategoryAdd: string = "usercategoryadd";

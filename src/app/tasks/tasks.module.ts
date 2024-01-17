@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { TasksRoutingModule } from './tasks-routing.module';
 import { TasksComponent, TaskDetails } from './tasks.component';
 // import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { ListOverComponent } from './list-over/list-over.component';
-
-import { SharedModule } from '../shared/shared.module';
-
+import { SharedModule } from 'src/app/shared/shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
@@ -28,6 +24,7 @@ import { MyLineChartComponent } from './my-line-chart/my-line-chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 /// import { chart } from 'chart.js';
 @NgModule({
   declarations: [

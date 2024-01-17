@@ -1,0 +1,28 @@
+.block {
+    position: absolute;
+    display: inline-block;
+    // width: 100px;
+    // height: 100px;
+    background-color: black;
+}
+.snake-doc {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.settings-panel-wrap {position: absolute; right: 10px; top: 10px;}
+.settings-panel {
+    transition: width 0.4s, height 0.4s, background 0.4s;
+    display: block;
+    border-radius: 10px;
+    position: absolute;
+    top: 24px; right: 0px;
+    width: 0; height: 0;
+    &.open {
+        transition: width 0.4s, height 0.4s, background 0.4s;
+        background: rgba(0,0,0,0.2);
+        width: 400px;
+        height: 300px;
+    }
+}

@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { TokenInterceptor } from './utility/token.interceptor';
+// import { SharedModule } from './shared/shared.module'
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -15,6 +16,7 @@ import { TokenInterceptor } from './utility/token.interceptor';
     HttpClientModule,
     BrowserAnimationsModule,
     MatNativeDateModule,
+    //SharedModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },

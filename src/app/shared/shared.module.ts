@@ -8,9 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatChipsModule} from '@angular/material/chips';
 import { CategoryRefForTaskDirective } from './category-ref-for-task.directive';
+import { PlaceholderComponent } from './placeholder/placeholder.component';
+import { DaysremainingPipe } from './daysremaining.pipe';
 @NgModule({
-  declarations: [TaskTemplateComponent, CategoryRefForTaskDirective],
+  declarations: [TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe],
   imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatInputModule, MatFormFieldModule,MatChipsModule],
-  exports: [TaskTemplateComponent, CategoryRefForTaskDirective],
+  exports: [TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe],
 })
 export class SharedModule {}

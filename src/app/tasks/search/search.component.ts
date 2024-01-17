@@ -5,13 +5,14 @@ import {
   AfterViewInit,
   ViewChild,
   EventEmitter,
-  Output,
+  Renderer2,
+  Output, Input
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TasksService } from '../tasks.service';
 import { fromEvent, Observable } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
+import { map, takeUntil , catchError, switchMap, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -23,54 +24,51 @@ export class SearchComponent implements AfterViewInit {
   public options: any[] = ['qqq', 'www', 'rrr'];
   public st: any;
   public filteredOptions: any[] = [];
-  @Output() public searchTerm = new EventEmitter<string>();
-  constructor(private _fb: FormBuilder, private _taskService: TasksService) {}
+  @Input() public searchKeyword:string='';
+  @Output() public searchTerm = new EventEmitter<any>();
+  constructor(private _fb: FormBuilder, private _r2 : Renderer2, private _taskService: TasksService) {}
 
-  // @ViewChild('searchTerm') 'searchTerm': ElementRef;
+  @ViewChild('icon_close', { static: false }) 'icon_close': ElementRef;
+  @ViewChild('icon_refresh', { static: false }) 'icon_refresh': ElementRef;
+  @ViewChild('searchInp', { static: false }) 'searchInp': ElementRef;
+  @ViewChild('clearSearch', { static: false }) 'clearSearch': ElementRef;
 
   ngOnInit(): void {
     //this.filteredOptions = ['df'];
     this.searchFormGroup = this._fb.group({
       searchTerm: [''],
     });
+    this.searchValue = this.searchKeyword;
   }
 
   ngAfterViewInit() {
-    this.st = document.getElementById(`searchTerm`);
-
-    let searchEvent = fromEvent(this.st, 'keyup');
-
+    this._r2.setStyle(this.icon_refresh.nativeElement,'display','none');
+    let searchEvent = fromEvent(this.searchInp.nativeElement, 'keyup');
+    searchEvent.subscribe(as => {
+      this._r2.setStyle(this.icon_refresh.nativeElement,'display','inline-block');
+      this._r2.setStyle(this.icon_close.nativeElement,'display',' none');
+      this.searchTerm.emit('loading');
+    });
+    
     searchEvent
       .pipe(
         map((x: any) => x.currentTarget.value),
-        debounceTime(1000),
-        distinctUntilChanged()
+        filter(w => w.length > 2 || w.length == 0),
+        debounceTime(1400),
+        distinctUntilChanged(),
+        //takeUntil(clearEvent)
       )
       .subscribe((searchedTerm) => {
+        this._r2.setStyle(this.icon_refresh.nativeElement,'display','none');
+        this._r2.setStyle(this.icon_close.nativeElement,'display','inline-block');
         let st = searchedTerm.toLowerCase()
         this.searchTerm.emit(st);
-        // this._taskService.taskSearch(searchedTerm).subscribe((data: any) => {
-        //   let fval = searchedTerm.toLowerCase();
-        //   console.log('taskSearch-taskSearch', data, fval);
-        //   this.filteredOptions = data.filter((x: any) =>
-        //     x.taskname.toLowerCase().includes(fval)
-        //   );
-        //   this.searchTerm.emit(this.filteredOptions);
-        // });
-
-        // return this.options.filter((option) =>
-        //   option.toLowerCase().includes(filterValue)
-        // );
       });
   }
 
-  clearSearch() {
+  btnClearSearch() {
     this.searchValue = '';
-    this.searchTerm.emit('');
+    this.searchTerm.emit(null);
   }
 
-  // optionSelected(task_id: number) {
-  //   this.searchTerm.emit(task_id);
-  //   console.log('optionSelected --', task_id);
-  // }
 }

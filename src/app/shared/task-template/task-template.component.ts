@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { TasksService } from 'src/app/tasks/tasks.service';
-
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-task-template',
   templateUrl: './task-template.component.html',
@@ -9,14 +10,17 @@ import { TasksService } from 'src/app/tasks/tasks.service';
 export class TaskTemplateComponent implements OnInit {
   @Input() tasklist: any[] = [];
   @Input() noedit: any;
-  @Input() isList: boolean = false;
-  @Output() taskEdit = new EventEmitter();
+  @Input() isList: string = '';
+  @Output() taskUpdate = new EventEmitter();
   @Output() taskId = new EventEmitter<any>();
-  public user:any;
 
-  constructor(private _taskService: TasksService) {}
+  public user:any;
+  public env:any;
+
+  constructor(private _taskService: TasksService, private _router:Router) {}
 
   ngOnInit(): void {
+    this.env = environment.base_url;
     this.user = JSON.parse(sessionStorage.getItem('user') as any);
     console.log("tasklist-----------",this.tasklist);
   }
@@ -57,6 +61,12 @@ export class TaskTemplateComponent implements OnInit {
   //   });
   // }
 
+  goto(cat:string) {
+    console.log("cate : ",cat);
+    let ght = cat.toString().toLowerCase();
+    this._router.navigate([`./tasks/${ght}`], { queryParamsHandling : 'merge'});
+  }
+
   task_status(taskId: string, isOver: boolean) {
     this._taskService.userTaskStatusChange(taskId, isOver).subscribe({
       next: (w:any) => {
@@ -67,6 +77,7 @@ export class TaskTemplateComponent implements OnInit {
       },
       complete: () => {
         this._taskService.bs.next('task_status_updated');
+        this.taskUpdate.emit('task_status_updated')
       }
    } );
   }

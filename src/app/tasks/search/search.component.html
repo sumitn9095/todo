@@ -9,11 +9,14 @@
 
   <mat-form-field class="fluid-input" appearance="fill">
     <mat-label>Enter your Search</mat-label>
-    <input id="searchTerm" type="text" placeholder="Pick one" aria-label="Seach Term" [(ngModel)]="searchValue" matInput
+    <input #searchInp type="text" placeholder="Pick one" aria-label="Seach Term" [(ngModel)]="searchValue" matInput
       formControlName="searchTerm" name="searchTerm" />
-    <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
-      <mat-icon>close</mat-icon>
-    </button>
+      <span matSuffix mat-icon-button aria-label="Clear">
+        <span #icon_refresh class="material-icons">refresh</span>
+        <button #clearSearch (click)="btnClearSearch()"  >
+          <span #icon_close class="material-icons">close</span>
+        </button>
+      </span>
     <!-- <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions" [value]="option.taskname" (click)="optionSelected(option._id)">
         {{option.taskname}}
