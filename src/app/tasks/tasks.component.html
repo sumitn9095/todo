@@ -125,7 +125,7 @@
 
 <ng-template #modalemplate [ngIf]="infoModal.show ?? infoModal.error">
   <app-modal [infoModalType]="infoModalType" [class]="{'error' : infoModal.error, 'success' : infoModal.show }" (modalCloseInit)="closeInfoModal($event)">
-      <header><h4>Error {{infoModal.type}}</h4></header>
+      <header><h4>{{infoModalType}}</h4></header>
       <body><p>{{infoModal.message}}</p></body>
   </app-modal>
 </ng-template>

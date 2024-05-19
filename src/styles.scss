@@ -180,10 +180,12 @@ mat-card-actions {
 
   .modal-footer {
       padding: 10px 20px;
+      text-align: right;
   }
   
 
   .modal-header {
+      text-align: left;
       border-bottom: #c7c7c7 solid 1px;
       h2 {
           font-size: 20px;
@@ -215,10 +217,18 @@ mat-card-actions {
       transition: transform 0.3s ease-out;
     }
     .modal-body {
+      
+      text-align: left;
       p {margin:0;}
       body {
-        overflow: auto;padding: 20px;
+        padding: 10px 20px;
+        overflow: auto;
+        background-color: white !important;
       }
+    }
+
+    .modal-footer {
+      background: #e8e8e8;
     }
 
     // &.chart {

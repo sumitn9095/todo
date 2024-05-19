@@ -8,7 +8,7 @@
             <ng-content select="body"></ng-content>
         </div>
         <div class="modal-body"  *ngIf="infoModalType === 'chart';">
-            <app-chart-pie></app-chart-pie>
+            <body><app-chart-pie></app-chart-pie></body>
         </div>
         <div class="modal-footer" *ngIf="infoModalType === 'loginTimeOut';">
             <p>Redirecting to Login in {{tmr}}/5 seconds</p>

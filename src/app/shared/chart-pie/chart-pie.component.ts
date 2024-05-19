@@ -9,7 +9,7 @@ import { TasksService } from 'src/app/tasks/tasks.service';
 })
 export class ChartPieComponent implements OnInit {
   public chart: any;
-  public selectedChartGroupedUngrouped: number = 1;
+  public selectedChartGroupedUngrouped: number = 2;
   public selectedChartType: number = 2;
   // public tasks_today: any[]=[];
   // public tasks: any[]=[];
@@ -28,7 +28,6 @@ export class ChartPieComponent implements OnInit {
       next: (taskGroups:any)=>{
         console.log("tasks_for_chartBs",taskGroups);
         this.taskGroups = taskGroups;
-
         setTimeout(() => {
           // init Chart 'Grouped/Un-grouped type' and 'type' 
           this.init_updateSetting_type(this.selectedChartType); 
@@ -61,8 +60,8 @@ export class ChartPieComponent implements OnInit {
   // updateSetting_takeAction_ungrouped(){
   //   this.taskGroups.map((taskGroup:any, i:number)=>{
   //     taskGroup.map((task:any, z:number)=>{
-  //       if(i==0) this.chart_data_color.push('blue');
-  //       if(i==1) this.chart_data_color.push('green');
+  //       if(i==0) this.chart_data_color.push('#7777c5');
+  //       if(i==1) this.chart_data_color.push('#deb887');
   //       if(i==2) this.chart_data_color.push('white');
   //       this.chart_data_labels.push(task.taskname);
   //       this.chart_data_data.push(1);
@@ -97,9 +96,9 @@ export class ChartPieComponent implements OnInit {
     this.taskGroups.map((taskGroup:any, i:number)=>{
         nd[0].label = 'Tasks';
         taskGroup.map((task:any, z:number)=>{
-          if(i==0) nd[0].backgroundColor.push('blue');
-          if(i==1) nd[0].backgroundColor.push('green');
-          if(i==2) nd[0].backgroundColor.push('grey');
+          if(i==0) nd[0].backgroundColor.push('#7777c5');
+          if(i==1) nd[0].backgroundColor.push('#deb887');
+          if(i==2) nd[0].backgroundColor.push('#c8c8c8');
           this.chart.data.labels.push(`Task: ${task.taskname}`);
           nd[0].data.push(1);
         })
@@ -139,9 +138,9 @@ export class ChartPieComponent implements OnInit {
       if(i==2) nd[i].label = 'Tasks Over';
     
       taskGroup.map((task:any, z:number)=>{
-        if(i==0) nd[i].backgroundColor.push('blue');
-        if(i==1) nd[i].backgroundColor.push('green');
-        if(i==2) nd[i].backgroundColor.push('gray');
+        if(i==0) nd[i].backgroundColor.push('#7777c5');
+        if(i==1) nd[i].backgroundColor.push('#deb887');
+        if(i==2) nd[i].backgroundColor.push('#c8c8c8');
         this.chart.data.labels.push(task.taskname);
         nd[i].data.push(1);
       })
@@ -202,9 +201,18 @@ export class ChartPieComponent implements OnInit {
         datasets: []
       },
       options: {
+        plugins: {
+          legend: {
+              display: false,
+              labels: {
+                  color: 'rgb(255, 99, 132)'
+              }
+          }
+        },
         maintainAspectRatio: false,
         scales: {
           y: {
+            display: false,
             beginAtZero: true
           }
         }
