@@ -20,7 +20,8 @@ const routes: Routes = [
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { path: 'hobby', loadChildren: () => import('./hobby/hobby.module').then(m => m.HobbyModule) },
   { path: 'category', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule) },
-  { path: 'test', loadChildren: ()=>import('./test/test.module').then(m => m.TestModule)}
+  { path: 'test', loadChildren: ()=>import('./test/test.module').then(m => m.TestModule)},
+  // { path: 'change-detection-with-signal', loadChildren: ()=>import('./change-detection-with-signal/change-detection-with-signal.component').then(m => m.ChangeDetectionWithSignalComponent)}
 ];
 
 @NgModule({

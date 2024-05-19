@@ -7,6 +7,9 @@ export class CommonConstants {
     public static getUser(){
         return JSON.parse(sessionStorage.getItem('user') as any);
     }
+    public static matchKeywordUnAuth = (keyword: string) : any => {
+      if(keyword.match(/unauth/)) return true;
+    }
     public static snack_bar_expiry: number = 4400;
     public static openSnackBar(message: string, action: string) {
         // this.snackbar.open(message, action, {

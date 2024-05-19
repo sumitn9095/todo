@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CommonConstants } from 'src/app/utility/CommonConstants';
+import { CommonService } from 'src/app/common.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-signin',
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
   public signInForm! : FormGroup;
-  constructor(private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router) { }
+  constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router) { }
 
   ngOnInit(): void {
     this.signInForm = this._fb.group({
@@ -24,23 +24,17 @@ export class SigninComponent implements OnInit {
     return this.signInForm.controls;
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: CommonConstants.snack_bar_expiry,
-    });
-  }
-
   submitSignInForm(val:any){
     if(this.signInForm.status == 'INVALID') return;
     this._auth.signIn(this.signInForm.value).subscribe({
       next: (w:any)=>{
-        this.openSnackBar(w.message, "Success");
         sessionStorage.setItem('user',JSON.stringify(w.user));
         sessionStorage.setItem('token', w.token);
         this._router.navigate(["../../tasks"]);
+        this._cs.openSnackBar(w.message, "Success");
       },
       error: (err:any)=>{
-        this.openSnackBar(err?.error.message, "Error");
+        this._cs.openSnackBar(err?.error.message, "Error");
       }
     })
   }

@@ -7,6 +7,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { TasksService } from './tasks.service';
+import { CommonService } from '../common.service';
 import { Task } from './task';
 import {
   MatDialog,
@@ -28,6 +29,8 @@ import * as moment from 'moment';
 import { CommonConstants } from '../utility/CommonConstants';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { saveAs } from 'file-saver';
+import { Infomodal } from '../utility/infomodal';
+import { ModalComponent } from '../shared/modal/modal.component';
 export interface DialogData {
   taskDetails: any;
 }
@@ -63,17 +66,23 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   public taskPayload:{}={}
 
+  public infoModal : Infomodal = {show:false, message:''};
+
+  infoModalType : string = '';
+
   constructor(
     private _taskService: TasksService,
     private _dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _router : Router,
-    private _ar : ActivatedRoute
+    private _ar : ActivatedRoute,
+    private _cs : CommonService
   ) {
    
   }
 
   @ViewChild('userData') 'userData': ElementRef;
+  @ViewChild('modalemplate') 'modalemplate' : ModalComponent;
 
   openChartLine(dialogTempRef: any) {
     this.tasksChartOpened = true;
@@ -126,12 +135,36 @@ export class TasksComponent implements OnInit, AfterViewInit {
     });
   }
   fetchCategories(){
-    this._taskService.fetchUserCategories().subscribe((o:any) => {
-      this.categories = o;
-      this.isCategoriesLoaded.next(true);
-    });
-    //console.log("--------this.categories",this.categories);
+    // this._taskService.fetchUserCategories().subscribe((o:any) => {
+    //   this.categories = o;
+    //   this.isCategoriesLoaded.next(true);
+    // });
+
+    this._taskService.fetchUserCategories().subscribe({
+      next: ((j:any) => {
+        this.categories = j;
+        this.isCategoriesLoaded.next(true);
+      }),
+      error: ((err:any) => {
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        console.log("keywordHasAuth",errorMssg,keywordHasAuth);
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        }
+        else {this._cs.openSnackBar(errorMssg, "Error");}
+      })
+    })
   }
+
+  openChartModal() {
+    let tasksData = [this.tasks_today, this.tasks, this.tasks_over];
+    this._taskService.setTasksForChart(tasksData);
+    this.infoModalType = 'chart';
+    this.infoModal = {show: true};
+  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: this.snack_bar_expiry,
@@ -150,15 +183,37 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   delete_last(taskIdToDelete: number) {
-    this._taskService.taskDelete(taskIdToDelete).subscribe((task: any) => {
-      console.log(`${task} is deleted`);
-      this.getUserTasks();
+    this._taskService.taskDelete(taskIdToDelete).subscribe({
+      next: (task:any) => {
+        console.log(`${task} is deleted`);
+        this.getUserTasks();
+      },
+      error: ((err:any) => {
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error");}
+      })
     });
   }
 
   task_edit(taskId: string, newTaskName: any) {
-    this._taskService.taskEdit(taskId, newTaskName).subscribe((w) => {
-      this.getUserTasks();
+    this._cs.openSnackBar('Proccessing...');
+    this._taskService.taskEdit(taskId, newTaskName).subscribe({
+      next: (w:any) => {
+        this.getUserTasks();
+        this._cs.openSnackBar("Task Edited", "Success");
+      },
+      error: ((err:any) => {
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error");}
+      })
     });
   }
 
@@ -206,6 +261,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   downloadTasks(){
     //let obj = { email: this.user?.email }
+    this._cs.openSnackBar('Proccessing...');
     this._taskService.downloadTasks(this.taskPayload).subscribe({
       next: (w:any) => {
         if (w.type === HttpEventType.Sent) {
@@ -217,6 +273,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
         } else if (w instanceof HttpResponse) {
           var file = new File([w.body], "MyTasks", {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
           saveAs(file);
+          this._cs.openSnackBar("Tasks Downloaded in Excel", "Success");
         }
         // var blob = new Blob([w], {
         //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -225,11 +282,15 @@ export class TasksComponent implements OnInit, AfterViewInit {
       },
       error: (err:any)=>{
         console.log("downloadTasks",err);
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error");}
       }
     })
   }
-
-
 
 
   uploadFile() {
@@ -241,19 +302,35 @@ export class TasksComponent implements OnInit, AfterViewInit {
   selectFiles(e:any): void {
     let selectedFiles = e.target.files[0];
     console.log("selectFiles----",selectedFiles);
-    this._taskService.uploadTasks(selectedFiles).subscribe({
+    this._cs.openSnackBar('Proccessing...');
+    this._taskService.uploadTasks(selectedFiles, this.user?.email).subscribe({
       next: (w:any) => {
-        console.log("selectFiles",w)
+        this._cs.openSnackBar("Tasks Excel Uploaded", "Success");
       },
       error: (err:any)=>{
         console.log("downloadTasks",err);
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error");}
       }
     })
   }
 
+  checkTaskCountError(error:any) {
+    this.infoModalType = 'taskCountError';
+    this.infoModal = error;
+  }
+
   getUserTasks(){
     var categoryCapitalized = CommonConstants.capitalize(this.category);
-    this.taskPayload = { email: this.user?.email, query : this.query, category : categoryCapitalized };
+    this.taskPayload = { 
+      email: this.user?.email,
+      query : this.query,
+      category : categoryCapitalized
+    };
     var fetchUserTasks = this._taskService.userTasks(this.taskPayload);
     this.fetchUserTasksPiped = fetchUserTasks;
     this.fetchUserTasksPiped.subscribe({
@@ -266,6 +343,12 @@ export class TasksComponent implements OnInit, AfterViewInit {
       error: (err:any)=>{
         this.tasks_loaded = 'err';
         this.catchError(err);
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error");}
       },
       complete: ()=>{
         this.tasks_loaded = 'success';
@@ -376,6 +459,12 @@ export class TasksComponent implements OnInit, AfterViewInit {
     this.openTaskDetails(id);
   }
 
+
+  closeInfoModal(data:any){
+    console.log("closeInfoModal",data);
+    this.infoModal = {show : false};
+  }
+
   openTaskDetails(id:any) {
     //var taskDetailsModal:any;
     var taskDetails:any={};
@@ -406,33 +495,43 @@ export class TasksComponent implements OnInit, AfterViewInit {
                         next: (file:any) => {
                           if(result.taskDetails !== null) this.saveTaskDetails(result.taskDetails, file);
                         }, error: (err:any) => {
-                          
+                          this._cs.openSnackBar(err.error.message, "Error")
                         }, complete: ()=>{
                           this.getUserTasks();
                         }
                       })
                     
                   }, error: (err:any) => {
-                    
+                    this._cs.openSnackBar(err.error.message, "Error")
                   }, complete: ()=>{
                    // this.getUserTasks();
                   }
                 });
                 result = null;
               }
+              this._taskService.categorySelected.next([]);
             });
             dialogRef.afterOpened().subscribe((result:any) => {
-              console.log("taskDetailsModal - afterOpened", q.data.category);
+              this._taskService.categorySelected.subscribe({
+                next: (q:any) => {
+                  console.log("this._taskService.categorySelected", q);
+                }
+              })
               this._taskService.categorySelectedByDefault.next(q.data.category);
             });
           },
           error: (err:any)=>{
-            console.log("task-details", err);
+            this._cs.openSnackBar(err.error.message, "Error")
           }
         });
       },
-      error: (err:Error)=>{
-        //---
+      error: (err:any)=>{
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error")}
       }
     })
   }
@@ -442,8 +541,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
       next: (w:any)=>{
         this.getUserTasks();
       },
-      error: (err:Error)=>{
-
+      error: (err:any)=>{
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error")}
       },
       complete: ()=>{
 
@@ -477,7 +581,6 @@ export class TasksComponent implements OnInit, AfterViewInit {
 })
 export class TaskDetails {
   public taskDetailsForm! : FormGroup;
-
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl('');
   filteredFruits!: Observable<string[]>;
@@ -487,12 +590,15 @@ export class TaskDetails {
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
   announcer = Inject(LiveAnnouncer);
   public taskPhoto:any;
+  infoModalType : string = '';
+  infoModal : Infomodal = {show : false, message: ''};
   public fileUploadControl = new FileUploadControl(undefined, FileUploadValidators.filesLimit(2));
-
+  @ViewChild('modalemplate') 'modalemplate' : ModalComponent;
   constructor(
     private _fb : FormBuilder,
     private _task : TasksService,
     public dialogRef: MatDialogRef<TaskDetails>,
+    private _cs : CommonService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.taskDetailsForm = this._fb.group({
@@ -514,7 +620,12 @@ export class TaskDetails {
         this.fruits = q;
         console.log('fruits', this.fruits)
       }, error: (err:any) => {
-
+        let errorMssg = err?.error?.message;
+        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        if(keywordHasAuth) {
+          this.infoModalType = 'loginTimeOut';
+          this.infoModal = {show: true, message: errorMssg};
+        } else {this._cs.openSnackBar(errorMssg, "Error")}
       }
     });
   }
@@ -523,7 +634,6 @@ export class TaskDetails {
     console.log("file <<>>", e.target.files[0]);
     //this._task.taskPhotoBs.next(this.taskPhoto);
     this._task.taskPhotoBs.next( e.target.files[0]);
-
     var newFile = new File([e.target.files[0]], "taskPhoto", {type: ".png"});
     //this.taskPhoto = e.target.files.file.item(0);
   }
@@ -567,5 +677,4 @@ export class TaskDetails {
     const filterValue = value.toLowerCase();
     return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
   }
-
 }

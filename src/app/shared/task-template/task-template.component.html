@@ -1,24 +1,26 @@
-
-<div  class="tasklist" *ngFor="let task of tasklist">
+<div  class="tasklist" *ngFor="let task of tasklist; let i = index">
+  <button type="button" class="taskNumbers" mat-mini-fab color="primary" title="See Details" ><mat-icon>{{i+1}}</mat-icon></button>
   <mat-card [ngClass]="{'listMatCard': (isList == 'due'), 'listMatCardToday': (isList == 'today')}">
-    <div class="priority priority-{{task.priority}}">
+    <div class="priority priority-{{task.priority}}"></div>
+    <div *ngIf="task.imagePath !== ''">
+      <button type="button" class="removeImg" mat-mini-fab color="basic" title="Remove pic" (click)="removeImg(task._id)"><mat-icon>delete</mat-icon></button>
+      <img title="Task Photo" [src]="env + task.imagePath" />
     </div>
-    <div><img title="Task Photo" [src]="env + task.imagePath" /></div>
     <mat-card-title>
         <div class="d-flex">
           <mat-form-field class="tasknameinp" appearance="fill">
             <input matInput #task_inp_name title="Task Name" type="text" [value]="task.taskname">
-            <button *ngIf="task_inp_name.value" matSuffix mat-icon-button aria-label="Clear" (click)="task_edit(task._id,task_inp_name.value, task)">
+            <button type="button" *ngIf="task_inp_name.value" matSuffix mat-icon-button aria-label="Clear" (click)="task_edit(task._id,task_inp_name.value, task)">
               <mat-icon>edit</mat-icon>
             </button>
           </mat-form-field>
           <!-- <button mat-raised-button color="primary" (click)="task_edit(task._id,task_inp_name.value, task)">Edit</button> -->
-          <button mat-mini-fab color="basic" title="See Details" (click)="checkDetails(task._id)"><mat-icon>info</mat-icon></button>
+          <button type="button" mat-mini-fab color="basic" title="See Details" (click)="checkDetails(task._id)"><mat-icon>info</mat-icon></button>
       </div>
       <!-- <input #task_inp_name type="text" [value]="task.taskname" /> -->
       <mat-card-actions *ngIf="task.isOver; else task_not_over" align="end">
-        <button mat-raised-button color="primary" (click)="task_status(task._id, false)">Resume</button>
-        <button mat-raised-button color="warn" [title]="task._id" (click)="task_delete(task._id)">Delete</button>
+        <button type="button" mat-raised-button color="primary" (click)="task_status(task._id, false)">Resume</button>
+        <button type="button" mat-raised-button color="warn" [title]="task._id" (click)="task_delete(task._id)">Delete</button>
       </mat-card-actions>
     </mat-card-title>
     <mat-card-subtitle>
@@ -50,8 +52,16 @@
     </mat-card-subtitle>
     <ng-template #task_not_over>
       <mat-card-actions align="end">
-        <span><button mat-raised-button color="accent" (click)="task_status(task._id, true)">Done</button></span>
+        <span><button type="button" mat-raised-button color="accent" (click)="task_status(task._id, true)">Done</button></span>
       </mat-card-actions>
     </ng-template>
   </mat-card>
 </div>
+
+
+<ng-template #modalemplate [ngIf]="infoModal.show">
+  <app-modal [infoModalType]="infoModalType" (modalCloseInit)="closeInfoModal($event)">
+      <header><h4>Error {{infoModal.type}}</h4></header>
+      <body><p>{{infoModal.message}}</p></body>
+  </app-modal>
+</ng-template>

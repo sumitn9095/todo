@@ -46,3 +46,14 @@ mat-card {
     color: #333333;
   }
 }
+
+.removeImg {position: absolute; top:30px; right:30px;}
+
+.tasklist {
+  position: relative;
+ .taskNumbers {
+    position: absolute; left: -60px; top: 0;
+    mat-icon {font-family: Roboto, "Helvetica Neue", sans-serif;}
+    color: rgb(212, 212, 212);
+ }
+}

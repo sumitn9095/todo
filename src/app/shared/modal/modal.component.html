@@ -1,0 +1,21 @@
+<div class="modale opened" [class]="infoModalType">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <ng-content select="header"></ng-content>
+            <!-- <a href="#" class="btn-close closemodale" aria-hidden="true">&times;</a> -->
+        </div>
+        <div class="modal-body"  *ngIf="infoModalType !== 'chart';">
+            <ng-content select="body"></ng-content>
+        </div>
+        <div class="modal-body"  *ngIf="infoModalType === 'chart';">
+            <app-chart-pie></app-chart-pie>
+        </div>
+        <div class="modal-footer" *ngIf="infoModalType === 'loginTimeOut';">
+            <p>Redirecting to Login in {{tmr}}/5 seconds</p>
+            <button type="button" mat-raised-button color="primary" (click)="goBack()" class="btn" >Goto Login</button>
+        </div>
+        <div class="modal-footer" #standardModalFooter  *ngIf="infoModalType !== 'loginTimeOut'">
+            <button type="button" mat-raised-button color="primary" (click)="closeModal()" class="btn" >Close</button>
+        </div>
+    </div>
+</div>

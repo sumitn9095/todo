@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { TokenInterceptor } from './utility/token.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+// import { ChildComponent } from './change-detection-with-signal/child/child.component';
 // import { SharedModule } from './shared/shared.module'
 @NgModule({
   declarations: [AppComponent],
@@ -16,8 +18,10 @@ import { TokenInterceptor } from './utility/token.interceptor';
     HttpClientModule,
     BrowserAnimationsModule,
     MatNativeDateModule,
+    MatSnackBarModule
     //SharedModule
   ],
+  // exports: [ChildComponent],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}

@@ -1,0 +1,22 @@
+<mat-form-field appearance="fill">
+    <mat-label>Grouped / Ungrouped</mat-label>
+    <mat-select  [(value)]="selectedChartGroupedUngrouped" (selectionChange)="updateSetting_GroupedUngrouped($event)">
+      <mat-option [value]="1">Grouped</mat-option>
+      <mat-option [value]="2">Un-Grouped</mat-option>
+    </mat-select>
+  </mat-form-field>
+  selectedChartGroupedUngrouped-{{selectedChartGroupedUngrouped}}
+
+  <mat-form-field appearance="fill">
+    <mat-label>Chart Type</mat-label>
+    <mat-select [(value)]="selectedChartType" (selectionChange)="updateSetting_type($event)">
+      <mat-option [value]="1">Pie</mat-option>
+      <mat-option [value]="2">Bar</mat-option>
+    </mat-select>
+  </mat-form-field>
+  selectedChartType-{{selectedChartType}}
+
+<div class="chart-container">
+    <canvas *ngIf="selectedChartType == 1" id="pieChart" >{{ chart }}</canvas>
+    <canvas *ngIf="selectedChartType == 2" id="barChart" >{{ chart }}</canvas>
+</div>

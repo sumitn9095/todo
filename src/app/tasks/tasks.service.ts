@@ -22,6 +22,9 @@ export class TasksService {
   public categorySelected = new BehaviorSubject<any[]>([]);
   public taskPhotoBs = new BehaviorSubject<any>('');
   public categorySelectedByDefault = new BehaviorSubject<any[]>([]);
+
+  public tasks_for_chartBs = new BehaviorSubject<any[]>([]);
+
   constructor(private _http: HttpClient) {
     this.header.append('Content-type', 'application/json');
     this.user = CommonConstants.getUser();
@@ -32,9 +35,16 @@ export class TasksService {
     });
     return this._http.request<Task>(req);
   }
+
+setTasksForChart(data:any[]) {
+  this.tasks_for_chartBs.next(data);
+}
+
   tasks_details(taskId:string){
     return this._http.get<Task>(`${this.uri}task/${taskId}`, { headers: this.header });
   }
+
+ 
 
   // bsAdd() {
   //   this.bs.next('task_edited');
@@ -62,7 +72,7 @@ export class TasksService {
 
   taskDelete(taskIdToDelete: any): Observable<Task> {
     console.log(`task to be deleted is ${taskIdToDelete}`);
-    return this._http.delete<Task>(`${this.uri}delete/${taskIdToDelete}`);
+    return this._http.delete<Task>(`${this.uri}usertaskdelete/${taskIdToDelete}`);
   }
 
   taskSearch(taskName: any): Observable<Task> {
@@ -88,6 +98,11 @@ export class TasksService {
   userTaskDetail(id:any): Observable<any> {
     return this._http.get<any>(`${this.uri}${UrlConstants.userTaskDetail}/${id}`, {headers: this.header});
   }
+
+  countDocuments(email:string) : Observable<any> {
+    return this._http.post<any>(`${this.uri}${UrlConstants.countDocuments}`, {email}, {headers: this.header});
+  }
+
   userTaskInfoAndDetail(id:any): Observable<any> {
     return this._http.get<any>(`${this.uri}${UrlConstants.userTaskInfoAndDetail}/${id}`, {headers: this.header});
   }
@@ -107,6 +122,10 @@ export class TasksService {
     return this._http.post<any>(`${this.uri}${UrlConstants.userTaskDetailsSave}`, form, {headers: hdr});
   }
 
+  userRemoveImg(taskId:string){
+    return this._http.get<Task>(`${this.uri}${UrlConstants.userRemoveImg}/${taskId}`, { headers: this.header });
+  }
+
   downloadTasks(obj:{}): Observable<any> {
     var req = new HttpRequest(
         'POST',
@@ -120,11 +139,13 @@ export class TasksService {
     return this._http.request(req);
   }
 
-  uploadTasks(file:any): Observable<any> {
+  uploadTasks(file:any, email:string): Observable<any> {
     let hdr = new HttpHeaders();
     hdr.append('Content-type', 'multipart/form-data');
     const form = new FormData();
     if(file) form.append('taskexcel', file, file.name);
+
+    form.append('email',email);
     return this._http.post<any>(`${this.uri}${UrlConstants.uploadTasks}`, form, {headers: hdr});
     var req = new HttpRequest(
       'POST',
