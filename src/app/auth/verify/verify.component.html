@@ -1,0 +1,10 @@
+<ng-template #modalemplate [ngIf]="infoModal.show || infoModal.error">
+    <app-modal [infoModalType]="infoModalType" [infoModalCategory]="infoModalCategory"  [class]="{'error' : infoModal.error, 'success' : infoModal.show }" >
+        <header><h4>User Verification Status</h4></header>
+        <body>
+            <div>
+                <p>{{verificationMessage}}</p>
+            </div>
+        </body>
+    </app-modal>
+  </ng-template>

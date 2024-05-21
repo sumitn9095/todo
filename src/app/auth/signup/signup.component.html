@@ -1,5 +1,5 @@
 <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card class="box">
+    <mat-card class="box" *ngIf="!isSignUpSubmitted">
       <mat-card-header class="login-title">
         <mat-card-title>Signup</mat-card-title>
       </mat-card-header>
@@ -23,4 +23,18 @@
         <button title="Signup" type="submit" mat-stroked-button color="accent" class="btn-block">Signup</button>
       </form>
     </mat-card>
+    <div *ngIf="isSignUpSubmitted">
+      <div>
+        <h4>Verification Email sent to {{signUpForm.value.email}}</h4>
+      </div>
+    </div>
   </div>
+
+  <ng-template #modalemplate [ngIf]="isSignUpSubmitted">
+    <app-modal [infoModalType]="infoModalType"  [infoModalCategory]="infoModalCategory" [class]="{'error' : infoModal.error, 'success' : infoModal.show }" >
+        <header><h4>Verification Email sent to {{signUpForm.value.email}}</h4></header>
+        <body>
+            <p>Please goto your email inbox and click the link sent in the Verification email.</p>
+        </body>
+    </app-modal>
+  </ng-template>

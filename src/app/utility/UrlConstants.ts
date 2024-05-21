@@ -2,6 +2,7 @@ export class UrlConstants {
     // Auth
     public static signup: string = "register";
     public static signin: string = "signin";
+    public static verifyEmail: string = "verifyemail";
     // Tasks
     public static userTasks: string = "usertasks";
     public static userTasksSearch: string = "usertasksearch";

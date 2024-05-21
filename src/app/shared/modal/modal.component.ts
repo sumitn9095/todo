@@ -11,11 +11,12 @@ import { interval , take} from 'rxjs';
 export class ModalComponent implements OnInit {
   tmr : number = 0;
   @Input() public infoModalType : string = '';
+  @Input() public infoModalCategory : string = '';
   @Output() public modalCloseInit = new EventEmitter<boolean>(false);
   constructor(private _router: Router){}
 
   ngOnInit(): void {
-    if(this.infoModalType === 'loginTimeOut') this.startTimerToLogin();
+    if(this.infoModalType === 'loginTimeOut' || this.infoModalType === 'userVerified') this.startTimerToLogin();
   }
 
   goBack = () => {

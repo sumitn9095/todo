@@ -17,6 +17,9 @@ export class AuthService {
   signIn = (obj:{}) => {
     return this._http.post(`${this.uri}${UrlConstants.signin}`,obj);
   }
+  verify = (obj:{}) => {
+    return this._http.post(`${this.uri}${UrlConstants.verifyEmail}`,obj);
+  }
   signOut = () => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('token');

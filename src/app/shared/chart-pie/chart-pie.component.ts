@@ -219,4 +219,9 @@ export class ChartPieComponent implements OnInit {
       }
     });
   }
+
+  chartToImg(){
+    let chartImg = this.chart.toBase64Image('image/jpeg', 1);
+    console.log("chartImg", chartImg);
+  }
 }

@@ -44,6 +44,14 @@ setTasksForChart(data:any[]) {
     return this._http.get<Task>(`${this.uri}task/${taskId}`, { headers: this.header });
   }
 
+
+downloadChart(sd:any) {
+
+}
+
+chartToImage(ss:any) {
+  
+}
  
 
   // bsAdd() {
