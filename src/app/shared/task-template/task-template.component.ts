@@ -110,13 +110,6 @@ export class TaskTemplateComponent implements OnInit {
     });
   }
 
-  // delete_last(taskIdToDelete: number) {
-  //   this._taskService.taskDelete(taskIdToDelete).subscribe((task: any) => {
-  //     console.log(`${task} is deleted`);
-  //     this.task_list();
-  //   });
-  // }
-
   goto(cat:string) {
     console.log("cate : ",cat);
     let ght = cat.toString().toLowerCase();

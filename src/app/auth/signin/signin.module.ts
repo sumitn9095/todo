@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatCardModule,
     MatButtonModule, MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule, SharedModule
   ]
 })
 export class SigninModule { }

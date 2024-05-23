@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from 'src/app/common.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -12,9 +13,7 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
   public signInForm! : FormGroup;
-  
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router) { }
-
   ngOnInit(): void {
     this.signInForm = this._fb.group({
       'email' : ['',[Validators.required, Validators.email]],
@@ -32,8 +31,10 @@ export class SigninComponent implements OnInit {
       next: (w:any)=>{
         sessionStorage.setItem('user',JSON.stringify(w.user));
         sessionStorage.setItem('token', w.token);
-        this._router.navigate(["../../tasks"]);
-        this._cs.openSnackBar(w.message, "Success");
+        setTimeout(() => {
+          this._router.navigate(["../../tasks"]);
+          this._cs.openSnackBar(w.message, "Success");
+        }, 1000);
       },
       error: (err:any)=>{
         this._cs.openSnackBar(err?.error.message, "Error");

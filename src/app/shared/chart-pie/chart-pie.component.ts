@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { TasksService } from 'src/app/tasks/tasks.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-chart-pie',
@@ -221,7 +222,10 @@ export class ChartPieComponent implements OnInit {
   }
 
   chartToImg(){
-    let chartImg = this.chart.toBase64Image('image/jpeg', 1);
+    let chartImg = this.chart.toBase64Image('image/png', 1);
     console.log("chartImg", chartImg);
+    let chartType = this.selectedChartType === 1 ? 'pie' : 'bar';
+    let user = JSON.parse(sessionStorage.getItem("user") as any);
+    saveAs(chartImg, `${user.username}-tasks-status-${chartType}-chart.png`);
   }
 }

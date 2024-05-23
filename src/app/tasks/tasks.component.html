@@ -1,16 +1,21 @@
 <div class="header-bar">
   <mat-toolbar color="primary">
+    <div class="task-bar-logo">
+        <h2>Tasks:ToDo</h2>
+    </div>
     <div class="container">
       <app-create class="" (tasklist_create)="taskListHandle()" (taskCountError)="checkTaskCountError($event)"></app-create>
     </div>
-    <button mat-icon-button class="example-icon" title="Line Chart" (click)="signOut()"
-      aria-label="icon-button with show_chart icon">
-      <mat-icon>person</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartModal()"
-      aria-label="icon-button with show_chart icon">
-      <mat-icon>show_chart</mat-icon>
-    </button>
+    <div class="task-bar-actions">
+      <button mat-icon-button class="example-icon" title="Line Chart" (click)="signOut()"
+        aria-label="icon-button with show_chart icon">
+        <mat-icon>person</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartModal()"
+        aria-label="icon-button with show_chart icon">
+        <mat-icon>show_chart</mat-icon>
+      </button>
+    </div>
     <!-- <button mat-icon-button class="example-icon" title="Bar Chart" (click)="openChartBar(userData)"
       aria-label="icon-button with bar_chart icon">
       <mat-icon>bar_chart</mat-icon>
@@ -27,24 +32,20 @@
         <div class="d-flex items-center justify-between">
           <div class="task_filters">
             <mat-form-field appearance="fill">
-              <mat-label>{{category}}</mat-label>
+              <mat-label>Categories</mat-label>
               <mat-select (selectionChange)="viewCategory($event)" [(value)]="categoryCapitalized">
                 <mat-option [value]="null" >Select</mat-option>
                 <mat-option *ngFor="let cat of categories.data" [value]="cat.name">{{cat.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <button
-              type="button" title="Upload"
-              (click)="uploadFile()"
-              className="btn-slim btn-download"
-            >
-            Upload
-          </button>
-          <button type="button" title="Download Tasks in Excel" (click)="downloadTasks()">Download</button>
+          <div class="w-full d-flex items-center justify-end">
+            <button mat-raised-button color="primary"  type="button" title="Upload" (click)="uploadFile()" class="btn  w-2/6 {{processUploadTasks ? 'processing' : ''}}">Upload Excel</button>
+            <button mat-raised-button color="basic" type="button" title="Download Tasks in Excel" (click)="downloadTasks()" class="btn !ml-4 w-2/6 {{processDownloadTasks ? 'processing' : ''}}">Download Tasks in Excel</button>
+          </div>
+          
         </div>
-        <input title="Upload_Input" name="taskexcel" type="file" id="browse_btn" (change)="selectFiles($event)"
-                                        value="Browse" />
+        <input style="visibility: hidden;" title="Upload_Input" name="taskexcel" type="file" id="browse_btn" (change)="selectFiles($event)" value="Browse" />
 
       </div>
     </div>
@@ -84,7 +85,6 @@
             {{ errorMsg | json}}
           </div>
           <ng-template #tasks_loading>
-
             <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
               <circle id="arc1" class="circle" cx="150" cy="150" r="120" opacity=".89" fill="none" stroke="#632b26"
                 stroke-width="12" stroke-linecap="square" stroke-opacity=".99213" paint-order="fill markers stroke" />

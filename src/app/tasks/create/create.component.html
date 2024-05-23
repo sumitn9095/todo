@@ -7,6 +7,7 @@
     </button>
   </mat-form-field>
   <mat-form-field class="input-priority" appearance="fill">
+    <mat-label>Priority</mat-label>
     <mat-select  title="Priority" [(ngModel)]="selectedPriority" name="priority" formControlName="priority">
       <mat-option *ngFor="let p of priorityList" [value]="p.value">
         {{p.viewValue}}

@@ -70,6 +70,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   infoModalType : string = '';
 
+  processUploadTasks : boolean = false;
+  processDownloadTasks : boolean = false;
+
   constructor(
     private _taskService: TasksService,
     private _dialog: MatDialog,
@@ -262,6 +265,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   downloadTasks(){
     //let obj = { email: this.user?.email }
     this._cs.openSnackBar('Proccessing...');
+    this.processDownloadTasks = true;
     this._taskService.downloadTasks(this.taskPayload).subscribe({
       next: (w:any) => {
         if (w.type === HttpEventType.Sent) {
@@ -273,6 +277,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
         } else if (w instanceof HttpResponse) {
           var file = new File([w.body], "MyTasks", {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
           saveAs(file);
+          this.processDownloadTasks = false;
           this._cs.openSnackBar("Tasks Downloaded in Excel", "Success");
         }
         // var blob = new Blob([w], {
@@ -282,12 +287,17 @@ export class TasksComponent implements OnInit, AfterViewInit {
       },
       error: (err:any)=>{
         console.log("downloadTasks",err);
+        this.processDownloadTasks = false;
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         if(keywordHasAuth) {
           this.infoModalType = 'loginTimeOut';
           this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+        } else {
+          this.infoModalType = 'common';
+          this.infoModal = {error: true, message: err.error.message};
+        }
+        
       }
     })
   }
@@ -303,18 +313,26 @@ export class TasksComponent implements OnInit, AfterViewInit {
     let selectedFiles = e.target.files[0];
     console.log("selectFiles----",selectedFiles);
     this._cs.openSnackBar('Proccessing...');
+    this.processUploadTasks = true;
     this._taskService.uploadTasks(selectedFiles, this.user?.email).subscribe({
       next: (w:any) => {
         this._cs.openSnackBar("Tasks Excel Uploaded", "Success");
+        this.processUploadTasks = false;
       },
       error: (err:any)=>{
+        this.processUploadTasks = false;
         console.log("downloadTasks",err);
         let errorMssg = err?.error?.message;
-        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        if(keywordHasAuth) {
+        let keywordHasAuth = err?.error?.message ? CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase()) : false;
+        if(err?.error?.message && keywordHasAuth) {
           this.infoModalType = 'loginTimeOut';
           this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+        } else {
+          this.infoModalType = 'common';
+          console.log(err)
+          this.infoModal = {error: true, message: err?.error?.message};
+        }
+       
       }
     })
   }

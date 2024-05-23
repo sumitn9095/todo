@@ -7,7 +7,7 @@
 </div>
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="taskDetailsForm">
-    <div class="!w-full">
+    <div class="!w-full mb-18">
       <!-- <mat-form-field appearance="fill" class="!w-full">
         <mat-label>Task Photo</mat-label> -->
         <!-- <input  #task_inp_photo title="Task Name" type="file" (change)="handleTaskPhoto($event)"  > -->
@@ -28,12 +28,12 @@
           <input matStartDate placeholder="Start date" formControlName="startDate" [defaultValue]="data?.taskDetails.date" [(ngModel)]="data?.taskDetails.date" [(value)]="data?.taskDetails.date" >
           <input matEndDate placeholder="End date" formControlName="dueDate" [(ngModel)]="data?.taskDetails.dueDate">
         </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
-    <div class="!w-full">
+    <div class="!w-full mb-18">
       <mat-label>Task Priority</mat-label>
       <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="priority"   [(ngModel)]="data?.taskDetails.priority" >
         <mat-button-toggle [value]="0">Small</mat-button-toggle>
@@ -41,7 +41,7 @@
         <mat-button-toggle [value]="2">High</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-    <div class="!w-full">
+    <div class="!w-full mb-18">
       <mat-label>Task Is Over</mat-label>
       <mat-button-toggle-group  name="fontStyle" aria-label="Font Style" formControlName="isOver" [(ngModel)]="data?.taskDetails.isOver">
         <mat-button-toggle [value]="true">Done</mat-button-toggle>

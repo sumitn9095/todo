@@ -10,11 +10,11 @@ mat-card {
 
   .priority {
     position: absolute;
-    right: 0;
-    top: 0;
     width: 10px;
     height: 10px;
-
+    border-radius: 4px;
+    right: 2px;
+    top: 2px;
     &.priority-0 {
       background-color: white;
     }
@@ -56,4 +56,13 @@ mat-card {
     mat-icon {font-family: Roboto, "Helvetica Neue", sans-serif;}
     color: rgb(212, 212, 212);
  }
+}
+
+
+.date-div {
+  font-size: 0.8rem;
+  .date {
+    display: inline-block;
+    min-width: 73px;
+  }
 }

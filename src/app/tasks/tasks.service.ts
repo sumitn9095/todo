@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Task } from './task';
 import { CommonConstants } from '../utility/CommonConstants';
+
 import {
   HttpClient,
   HttpHeaders,
@@ -47,10 +48,6 @@ setTasksForChart(data:any[]) {
 
 downloadChart(sd:any) {
 
-}
-
-chartToImage(ss:any) {
-  
 }
  
 

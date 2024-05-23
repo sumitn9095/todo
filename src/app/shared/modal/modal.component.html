@@ -21,7 +21,7 @@ userVerified -->
             <p>Redirecting to Login in {{tmr}}/5 seconds</p>
             <button type="button" mat-raised-button color="primary" (click)="goBack()" class="btn" >Goto Login</button>
         </div>
-        <div class="modal-footer" #standardModalFooter  *ngIf="infoModalType == 'taskCountError' || infoModalType == 'chart'">
+        <div class="modal-footer" #standardModalFooter  *ngIf="infoModalType == 'taskCountError' || infoModalType == 'chart'  || infoModalType == 'common'">
             <button type="button" mat-raised-button color="primary" (click)="closeModal()" class="btn" >Close</button>
         </div>
     </div>

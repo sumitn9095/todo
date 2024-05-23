@@ -14,6 +14,12 @@ body {
 }
 
 
+.mb-18 {
+  margin-bottom: 18px;
+}
+
+.mat-raised-button.mat-basic {background-color: white;}
+
 .d-flex {display: flex;}
 .flex-basis-100 {
   flex :1 1 100%;
@@ -97,7 +103,10 @@ mat-card-actions {
 }
 
 .input-search {
-  width: calc(100% - 220px);
+  width: calc(100% - 260px);
+}
+.input-priority {
+  width: 140px;
 }
 
 .tasknameinp {
@@ -170,9 +179,8 @@ mat-card-actions {
           display: block;
       }
       .modal-dialog {
-          -webkit-transform: translate(0, 0);
-          -ms-transform: translate(0, 0);
-          transform: translate(0, 0);
+          transform: translate(-50%,0);
+          width: 420px;
           top: 20%;
           pointer-events: unset;
       }
@@ -200,13 +208,13 @@ mat-card-actions {
       background: #fefefe;
       border: #333333 solid 0px;
       border-radius: 5px;
-      margin-left: -200px;
+      // margin-left: -200px;
       text-align:center;
       position: fixed;
       left: 50%;
       top: -100%;
       z-index: 8999;
-      width: 360px;
+      
       box-shadow:0 5px 10px rgba(0,0,0,0.3);
       -webkit-transform: translate(0, -500%);
       -ms-transform: translate(0, -500%);
@@ -239,4 +247,92 @@ mat-card-actions {
     //     height: calc(100vh - 100px);
     //   }
     // }
+}
+
+
+
+
+.loader-ring {
+  display: inline-block;
+  position: relative;
+}
+.loader-ring-div  {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  margin: 2px;
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: white transparent transparent transparent;
+}
+
+
+
+
+//--- loader 
+.lds-ring-custom {
+  cursor:help;
+  @extend .loader-ring;
+}
+.lds-ring-custom div {
+  @extend .loader-ring-div;
+  border-width: 1px;
+  &:nth-of-type(1){
+    border-color: #555555;
+  }
+}
+
+
+.processing-common {
+  display: inline-block;
+  top: 33%;
+  left: 0;
+  margin-top: -5px;
+  vertical-align: middle;
+  transform: translateY(50%);
+  border-radius: 100px;
+  border-color: white;
+  border-style: outset;
+  animation: processing 2s linear infinite;
+}
+
+.processing-f-btn {
+  &::before {
+    content: "";
+    @extend .processing-common;
+    height: 1rem;
+    width: 1rem;
+    margin-right: 10px;
+    border-width: 2px !important;
+  }
+}
+
+@keyframes processing {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.btn {
+  &.processing {
+    position: relative;
+    opacity: 1;
+    @extend .processing-f-btn;
+  }
+}
+
+
+.task-bar-actions {
+  position: absolute;
+  right: 0;
+}
+
+.task-bar-logo {
+  position: absolute;
+  left:0;
 }

@@ -14,9 +14,12 @@ import { DaysremainingPipe } from './daysremaining.pipe';
 import { ModalComponent } from './modal/modal.component';
 import { ChartPieComponent } from './chart-pie/chart-pie.component';
 import { FormsModule } from '@angular/forms';
+import { LoaderComponent } from './loader/loader.component';
+import { HeaderComponent } from './header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 @NgModule({
-  declarations: [TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe, ModalComponent, ChartPieComponent],
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatInputModule, MatFormFieldModule,MatChipsModule,MatSelectModule,FormsModule],
-  exports: [TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe, ModalComponent, ChartPieComponent],
+  declarations: [TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe, ModalComponent, ChartPieComponent, LoaderComponent, HeaderComponent],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatToolbarModule, MatButtonModule, MatInputModule, MatFormFieldModule,MatChipsModule,MatSelectModule,FormsModule],
+  exports: [HeaderComponent, TaskTemplateComponent, CategoryRefForTaskDirective, PlaceholderComponent, DaysremainingPipe, ModalComponent, ChartPieComponent, LoaderComponent],
 })
 export class SharedModule {}
