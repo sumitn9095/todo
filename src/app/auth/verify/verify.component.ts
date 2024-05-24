@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { Infomodal } from 'src/app/utility/infomodal';
 
 @Component({
   selector: 'app-verify',
@@ -13,9 +14,7 @@ export class VerifyComponent implements OnInit, AfterViewInit {
   verifySecret: string | null = '';
   isUserVerified: any = null;
   verificationMessage : string | null = '';
-  infoModalType : string = '';
-  infoModalCategory : string = '';
-  infoModal: any = {};
+  infoModal: Infomodal = {};
 
   constructor(private _ar : ActivatedRoute, private _auth: AuthService, private _router: Router) { }
 
@@ -27,8 +26,6 @@ export class VerifyComponent implements OnInit, AfterViewInit {
   }
 
  ngAfterViewInit(): void {
-  this.infoModalType = 'userVerified';
-  this.infoModalCategory = 'nonModal';
   this.infoModal = {show: true};
   this.verificationMessage = 'User verification in progress';
     this._ar.params.subscribe((params: Params)=>{
@@ -39,15 +36,26 @@ export class VerifyComponent implements OnInit, AfterViewInit {
       console.log("verify",obj);
       this._auth.verify(obj).subscribe({
         next: (res:any) => {
-          this.isUserVerified = true;
-          this.verificationMessage = res.message;
+         // this.isUserVerified = true;
+          //this.verificationMessage = res.message;
+          this.infoModal = {
+            show: true,
+            title: "User Verification Status",
+            infoModalType: "userVerified",
+            message: res.message,
+            actions: "redirect"
+          };
         },
         error: (err:any) => {
           this.isUserVerified = false;
-          this.infoModalType = 'userVerified';
-          this.infoModalCategory = 'nonModal';
-          this.infoModal = {error: true};
-          this.verificationMessage = err.error.message;
+          this.infoModal = {
+            error: true,
+            title: "User Verification Status Error",
+            infoModalType: "error",
+            message: err.error.message,
+            type: "error",
+            actions: "close"
+          };
         }
       })
     })

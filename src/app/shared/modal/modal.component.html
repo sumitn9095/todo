@@ -5,23 +5,22 @@ taskCountError
 userCreated
 userVerified -->
 
-<div class="modale opened" [class]="infoModalType+' '+infoModalCategory">
+<div class="modale opened show-{{infoModal.show}} error-{{infoModal.error}}">
     <div class="modal-dialog">
         <div class="modal-header">
             <ng-content select="header"></ng-content>
-            <!-- <a href="#" class="btn-close closemodale" aria-hidden="true">&times;</a> -->
         </div>
-        <div class="modal-body"  *ngIf="infoModalType !== 'chart';">
+        <div class="modal-body"   *ngIf="infoModal.infoModalType !== 'chart';">
             <ng-content select="body"></ng-content>
         </div>
-        <div class="modal-body"  *ngIf="infoModalType === 'chart';">
+        <div class="modal-body"  *ngIf="infoModal.infoModalType === 'chart';">
             <body><app-chart-pie></app-chart-pie></body>
         </div>
-        <div class="modal-footer" *ngIf="infoModalType === 'loginTimeOut' || infoModalType === 'userVerified';">
+        <div class="modal-footer" *ngIf="infoModal.actions === 'redirect'">
             <p>Redirecting to Login in {{tmr}}/5 seconds</p>
             <button type="button" mat-raised-button color="primary" (click)="goBack()" class="btn" >Goto Login</button>
         </div>
-        <div class="modal-footer" #standardModalFooter  *ngIf="infoModalType == 'taskCountError' || infoModalType == 'chart'  || infoModalType == 'common'">
+        <div class="modal-footer" #standardModalFooter  *ngIf="infoModal.actions === 'close'">
             <button type="button" mat-raised-button color="primary" (click)="closeModal()" class="btn" >Close</button>
         </div>
     </div>

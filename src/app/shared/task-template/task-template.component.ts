@@ -50,8 +50,12 @@ export class TaskTemplateComponent implements OnInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         console.log("keywordHasAuth",errorMssg,keywordHasAuth)
-        if(keywordHasAuth) this.infoModal = {show: true, message: errorMssg};
-        else {this._cs.openSnackBar(errorMssg, "Error");}
+        if(keywordHasAuth) {
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       },
       complete:() => {
         this.taskUpdate.emit('task_status_updated')
@@ -75,11 +79,13 @@ export class TaskTemplateComponent implements OnInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         console.log("keywordHasAuth",errorMssg,keywordHasAuth)
-    
+  
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       },
       complete:() => {
         this._taskService.bs.next('task_edited');
@@ -98,10 +104,13 @@ export class TaskTemplateComponent implements OnInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         console.log("keywordHasAuth",errorMssg,keywordHasAuth)
+
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       },
       complete: () => {
         this._taskService.bs.next('task_deleted');
@@ -128,16 +137,17 @@ export class TaskTemplateComponent implements OnInit {
         console.log("keywordHasAuth",errorMssg,keywordHasAuth)
 
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
 
       },
       complete: () => {
         this._taskService.bs.next('task_status_updated');
         this.taskUpdate.emit('task_status_updated')
       }
-
    } );
   }
 }

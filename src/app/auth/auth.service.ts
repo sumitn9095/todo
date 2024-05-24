@@ -22,7 +22,7 @@ export class AuthService {
   }
   signOut = () => {
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('todo_token');
     this._router.navigate(["../auth/signin"]);
     this._cs.openSnackBar("Successfully signed-out", "Success");
   }

@@ -22,7 +22,7 @@ export class CreateComponent implements OnInit {
     { value: 2, viewValue: 'High' },
   ];
   @Output() public tasklist_create = new EventEmitter();
-  @Output() public taskCountError = new EventEmitter();
+  @Output() public taskCountError = new EventEmitter<any>();
   constructor(private _cs : CommonService, private _fb: FormBuilder, private _taskService: TasksService) {
     this.task_add = this._fb.group({
       taskname: ['', [Validators.required]],
@@ -64,7 +64,7 @@ export class CreateComponent implements OnInit {
       },
       error: (err:any) => {
         // console.log("countDocuments error",err);
-        this.taskCountError.emit(err?.error);
+        this.taskCountError.emit(err);
       },
       complete: () => {}
     })

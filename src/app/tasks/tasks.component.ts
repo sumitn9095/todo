@@ -7,6 +7,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { TasksService } from './tasks.service';
+import { AuthService } from '../auth/auth.service';
 import { CommonService } from '../common.service';
 import { Task } from './task';
 import {
@@ -66,15 +67,16 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   public taskPayload:{}={}
 
-  public infoModal : Infomodal = {show:false, message:''};
+  public infoModal : Infomodal  = {show:false, error:false, message:'', title:'', infoModalType:''};
 
-  infoModalType : string = '';
+  // infoModalType : string = '';
 
   processUploadTasks : boolean = false;
   processDownloadTasks : boolean = false;
 
   constructor(
     private _taskService: TasksService,
+    private _auth: AuthService,
     private _dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _router : Router,
@@ -153,10 +155,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         console.log("keywordHasAuth",errorMssg,keywordHasAuth);
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
         }
-        else {this._cs.openSnackBar(errorMssg, "Error");}
+        this.infoModal.message = errorMssg;
       })
     })
   }
@@ -164,8 +167,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   openChartModal() {
     let tasksData = [this.tasks_today, this.tasks, this.tasks_over];
     this._taskService.setTasksForChart(tasksData);
-    this.infoModalType = 'chart';
-    this.infoModal = {show: true};
+    this.infoModal = this._cs.openModal('chart');
   }
 
   openSnackBar(message: string, action: string) {
@@ -195,9 +197,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       })
     });
   }
@@ -213,9 +217,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       })
     });
   }
@@ -291,13 +297,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
+          this.infoModal = this._cs.openModal('loginTimeOut');
         } else {
-          this.infoModalType = 'common';
-          this.infoModal = {error: true, message: err.error.message};
+          this.infoModal = this._cs.openModal('error');
         }
-        
+        this.infoModal.message = errorMssg;
       }
     })
   }
@@ -324,22 +328,30 @@ export class TasksComponent implements OnInit, AfterViewInit {
         console.log("downloadTasks",err);
         let errorMssg = err?.error?.message;
         let keywordHasAuth = err?.error?.message ? CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase()) : false;
-        if(err?.error?.message && keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
+        // if(err?.error?.message && keywordHasAuth) {
+        //   this.infoModalType = 'loginTimeOut';
+        //   this.infoModal = {show: true, message: errorMssg};
+        // } else {
+        //   this.infoModalType = 'common';
+        //   console.log(err)
+        //   this.infoModal = {error: true, message: err?.error?.message};
+        // }
+
+        if(keywordHasAuth) {
+          this.infoModal = this._cs.openModal('loginTimeOut');
         } else {
-          this.infoModalType = 'common';
-          console.log(err)
-          this.infoModal = {error: true, message: err?.error?.message};
+          this.infoModal = this._cs.openModal('error');
         }
+        this.infoModal.message = errorMssg;
        
       }
     })
   }
 
   checkTaskCountError(error:any) {
-    this.infoModalType = 'taskCountError';
-    this.infoModal = error;
+    console.log("checkTaskCountError",error)
+    this.infoModal = this._cs.openModal('taskCountError');
+    this.infoModal.message = error.error.message;
   }
 
   getUserTasks(){
@@ -363,10 +375,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
         this.catchError(err);
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error");}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       },
       complete: ()=>{
         this.tasks_loaded = 'success';
@@ -479,8 +494,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
 
   closeInfoModal(data:any){
-    console.log("closeInfoModal",data);
-    this.infoModal = {show : false};
+      this.infoModal = {show : false};
   }
 
   openTaskDetails(id:any) {
@@ -546,10 +560,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
       error: (err:any)=>{
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error")}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       }
     })
   }
@@ -562,10 +579,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
       error: (err:any)=>{
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error")}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       },
       complete: ()=>{
 
@@ -587,7 +607,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   //--------------------------------------------------
 
   signOut(){
-    this._router.navigate(["../auth/signout"]);
+    this._auth.signOut()
   }
 }
 
@@ -605,10 +625,11 @@ export class TaskDetails {
   fruits: string[] = [];
   allFruits: string[] = [];
   //allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
   announcer = Inject(LiveAnnouncer);
   public taskPhoto:any;
-  infoModalType : string = '';
+  // infoModalType : string = '';
   infoModal : Infomodal = {show : false, message: ''};
   public fileUploadControl = new FileUploadControl(undefined, FileUploadValidators.filesLimit(2));
   @ViewChild('modalemplate') 'modalemplate' : ModalComponent;
@@ -640,10 +661,17 @@ export class TaskDetails {
       }, error: (err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+        // if(keywordHasAuth) {
+        //   this.infoModalType = 'loginTimeOut';
+        //   this.infoModal = {show: true, message: errorMssg};
+        // } else {this._cs.openSnackBar(errorMssg, "Error")}
+
         if(keywordHasAuth) {
-          this.infoModalType = 'loginTimeOut';
-          this.infoModal = {show: true, message: errorMssg};
-        } else {this._cs.openSnackBar(errorMssg, "Error")}
+          this.infoModal = this._cs.openModal('loginTimeOut');
+        } else {
+          this.infoModal = this._cs.openModal('error');
+        }
+        this.infoModal.message = errorMssg;
       }
     });
   }

@@ -32,10 +32,10 @@
   </div>
 
   <ng-template #modalemplate [ngIf]="isSignUpSubmitted">
-    <app-modal [infoModalType]="infoModalType"  [infoModalCategory]="infoModalCategory" [class]="{'error' : infoModal.error, 'success' : infoModal.show }" >
-        <header><h4>Verification Email sent to {{signUpForm.value.email}}</h4></header>
+    <app-modal [infoModal]="infoModal" >
+        <header><h4>{{infoModal.title}}</h4></header>
         <body>
-            <p>Please goto your email inbox and click the link sent in the Verification email.</p>
+            <p>{{infoModal.message}}</p>
         </body>
     </app-modal>
   </ng-template>

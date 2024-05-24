@@ -9,13 +9,11 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-
   constructor() {}
-
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let token = sessionStorage.getItem('token');
+    let token = sessionStorage.getItem('todo_token');
     let tokenAuth;
-    if(token !== ''){
+    if(token !== '') {
       tokenAuth = request.clone({
         setHeaders : { Authorization: 'Bearer '+token }
       })

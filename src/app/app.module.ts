@@ -8,6 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { TokenInterceptor } from './utility/token.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthGuard } from './utility/auth.guard';
 // import { ChildComponent } from './change-detection-with-signal/child/child.component';
 // import { SharedModule } from './shared/shared.module'
 @NgModule({
@@ -24,7 +25,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   // exports: [ChildComponent],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    AuthGuard
   ],
   bootstrap: [AppComponent],
 })

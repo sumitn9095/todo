@@ -4,6 +4,7 @@ import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from 'src/app/common.service';
 import { Router } from '@angular/router';
+import { Infomodal } from 'src/app/utility/infomodal';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -12,10 +13,7 @@ import { Router } from '@angular/router';
 export class SignupComponent implements OnInit {
   public isSignUpSubmitted : boolean = false;
   public signUpForm! : FormGroup;
-
-  infoModalType : string = '';
-  infoModalCategory : string = '';
-  infoModal: any = {};
+  infoModal: Infomodal = {};
 
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router) { }
 
@@ -38,14 +36,17 @@ export class SignupComponent implements OnInit {
         this._cs.openSnackBar("Signed Up", "Success");
         //this._router.navigate(["../signin"]);
         this.isSignUpSubmitted = true;
-        this.infoModalType = "userCreated";
-        this.infoModalCategory = 'nonModal';
+        this.infoModal = {
+          show: true,
+          title: `Verification Email sent to ${this.signUpForm.value.email}`,
+          message: "Please goto your email inbox and click the link sent in the Verification email.",
+          infoModalType: "userCreated",
+          actions: 'close'
+        }
       },
       error: (err:any)=>{
         this._cs.openSnackBar(err.error.message, "Error");
       }
     })
-   
   }
-
 }

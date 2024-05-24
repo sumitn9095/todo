@@ -7,14 +7,14 @@
       <app-create class="" (tasklist_create)="taskListHandle()" (taskCountError)="checkTaskCountError($event)"></app-create>
     </div>
     <div class="task-bar-actions">
-      <button mat-icon-button class="example-icon" title="Line Chart" (click)="signOut()"
-        aria-label="icon-button with show_chart icon">
-        <mat-icon>person</mat-icon>
-      </button>
-      <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartModal()"
-        aria-label="icon-button with show_chart icon">
-        <mat-icon>show_chart</mat-icon>
-      </button>
+        <button mat-icon-button class="example-icon" title="Line Chart" (click)="signOut()"
+          aria-label="icon-button with show_chart icon">
+          <mat-icon>person</mat-icon>
+        </button>
+        <button mat-icon-button class="example-icon" title="Line Chart" (click)="openChartModal()"
+          aria-label="icon-button with show_chart icon">
+          <mat-icon>show_chart</mat-icon>
+        </button>
     </div>
     <!-- <button mat-icon-button class="example-icon" title="Bar Chart" (click)="openChartBar(userData)"
       aria-label="icon-button with bar_chart icon">
@@ -124,8 +124,8 @@
 </ng-template>
 
 <ng-template #modalemplate [ngIf]="infoModal.show ?? infoModal.error">
-  <app-modal [infoModalType]="infoModalType" [class]="{'error' : infoModal.error, 'success' : infoModal.show }" (modalCloseInit)="closeInfoModal($event)">
-      <header><h4>{{infoModalType}}</h4></header>
+  <app-modal [infoModal]="infoModal" (modalCloseInit)="closeInfoModal($event)">
+      <header><h4>{{infoModal.title}}</h4></header>
       <body><p>{{infoModal.message}}</p></body>
   </app-modal>
 </ng-template>
