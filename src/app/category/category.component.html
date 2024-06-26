@@ -1,8 +1,9 @@
-<button type="button" (click)="fetchAll()">Fetch all Categories</button>
-<hr/>
-<div *ngFor="let s of categories">
-    <div>{{s.name}} - <a (click)="categoryRemove(s._id)">remove</a></div>
+<!-- <button type="button" (click)="fetchAll()">Fetch all Categories</button> -->
+<div class="category_wrap">
+    <button [title]="cat.name" class="button " type="button" [categoryRefForTask]="cat.name" *ngFor="let cat of categories">
+        <div class="btn-in"></div>{{cat.name}}<a (click)="categoryRemove(cat._id)"><mat-icon class="btn-in">close</mat-icon></a>
+    </button>
 </div>
-<hr/>
+
 <input type="text" value="" [(ngModel)]="categoryInp" placeholder="category">
-<button type="button" (click)="categoryAdd()">Add Hobbies</button>
+<button type="button" (click)="categoryAdd()">Add Category</button>

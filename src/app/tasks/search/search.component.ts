@@ -59,8 +59,13 @@ export class SearchComponent implements AfterViewInit {
         //takeUntil(clearEvent)
       )
       .subscribe((searchedTerm) => {
-        this._r2.setStyle(this.icon_refresh.nativeElement,'display','none');
-        this._r2.setStyle(this.icon_close.nativeElement,'display','inline-block');
+        //if(searchedTerm.length){
+          this._r2.setStyle(this.icon_refresh.nativeElement,'display','none');
+          this._r2.setStyle(this.icon_close.nativeElement,'display','inline-block');
+        // } else {
+        //   this._r2.setStyle(this.icon_refresh.nativeElement,'display','inline-block');
+        //   this._r2.setStyle(this.icon_close.nativeElement,'display','none');
+        // }
         let st = searchedTerm.toLowerCase()
         this.searchTerm.emit(st);
       });

@@ -31,13 +31,16 @@
       <div class="container">
         <div class="d-flex items-center justify-between">
           <div class="task_filters">
-            <mat-form-field appearance="fill">
-              <mat-label>Categories</mat-label>
-              <mat-select (selectionChange)="viewCategory($event)" [(value)]="categoryCapitalized">
-                <mat-option [value]="null" >Select</mat-option>
-                <mat-option *ngFor="let cat of categories.data" [value]="cat.name">{{cat.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div class="d-flex items-start justify-between category_input {{categoryCapitalized !== '' ? 'no-category-selected' : ''}}">
+              <a (click)="categoryCapitalized = '';navigateToTasks()" class="cursor-pointer"><span *ngIf="categoryCapitalized !== ''" class="material-icons">keyboard_arrow_left</span></a>
+              <mat-form-field appearance="fill">
+                <mat-label>Categories</mat-label>
+                <mat-select #categoryInp (selectionChange)="viewCategory($event)" [(value)]="categoryCapitalized">
+                  <mat-option [value]="null" >Select</mat-option>
+                  <mat-option *ngFor="let cat of categories.data" [value]="cat.name">{{cat.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
           <div class="w-full d-flex items-center justify-end">
             <button mat-raised-button color="primary"  type="button" title="Upload" (click)="uploadFile()" class="btn  w-2/6 {{processUploadTasks ? 'processing' : ''}}">Upload Excel</button>
@@ -53,20 +56,20 @@
     <div class="task_list">
       <div class="container">
         <div *ngIf="!contentLoading; else placeholder">
-          <div class="task-row">
+          <div class="task-row" class="{{tasks_today.length <= 0 ? 'empty' : ''}}">
             <h4>Today</h4>
             <app-task-template  *ngIf="tasks_today.length; else no_tasks_today" [tasklist]="tasks_today" [isList]="'today'" (taskId)="checkDetailsById($event)"  (taskUpdate)="getUserTasks()"></app-task-template>
-            <ng-template class="" #no_tasks_today >No Tasks Today</ng-template>
+            <ng-template class="" #no_tasks_today >No Tasks Due Today</ng-template>
           </div>
-          <div class="task-row">
+          <div class="task-row" class="{{tasks.length <= 0 ? 'empty' : ''}}">
             <h4>Task List</h4>
             <app-task-template  *ngIf="tasks.length;else no_tasks"  [tasklist]="tasks" [isList]="'due'" (taskId)="checkDetailsById($event)" (taskUpdate)="getUserTasks()"></app-task-template>
             <ng-template class="" #no_tasks >No Tasks</ng-template>
           </div>
-          <div class="task-row">
+          <div class="task-row" class="{{tasks_over.length <= 0 ? 'empty' : ''}}">
             <h4>Task Over List</h4>
             <app-task-template *ngIf="tasks_over.length;else no_tasks_over" [tasklist]="tasks_over" [noedit]="true" (taskId)="checkDetailsById($event)"  (taskUpdate)="getUserTasks()"></app-task-template>
-            <ng-template class="" #no_tasks_over >No Tasks</ng-template>
+            <ng-template class="" #no_tasks_over >No Tasks Over</ng-template>
           </div>
         </div>
         <ng-template #placeholder>

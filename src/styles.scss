@@ -13,6 +13,16 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+div,span,select,textarea,a,h1,h2,h3,h4,h5,h6,strong,sub,sup,
+input {
+  outline: none !important;outline-offset:0cap;box-shadow:none !important;
+  &[type="text"] {
+    &:focus{
+      outline: none !important;outline-offset:0cap;box-shadow:none !important;
+    }
+  }
+}
+
 
 .mb-18 {
   margin-bottom: 18px;
@@ -61,9 +71,9 @@ mat-card-actions {
 }
 
 
+.cursor-pointer {cursor: pointer !important;}
+
 .input-big {
-
-
   mat-card {
     background: transparent;
     border: none;

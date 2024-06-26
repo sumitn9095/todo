@@ -27,7 +27,7 @@
       <div>
         <div *ngIf="task.category !== undefined && task.category.length" class="content-start"> 
           <mat-chip-list>
-            <mat-chip [categoryRefForTask]="cat" *ngFor="let cat of task.category">
+            <mat-chip class="cursor-pointer category-chip" title="Show tasks under this category only" [categoryRefForTask]="cat" *ngFor="let cat of task.category">
               <a (click)="goto(cat)">{{cat}}</a>
             </mat-chip>
           </mat-chip-list>

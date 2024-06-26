@@ -11,6 +11,7 @@ export class CategoryComponent implements OnInit {
   constructor(private _task : TasksService) { }
   // @ViewChild('categoryInp') 'categoryInp' : ElementRef;
   ngOnInit(): void {
+    this.fetchAll()
   }
   fetchAll(){
     this._task.fetchUserCategories().subscribe({

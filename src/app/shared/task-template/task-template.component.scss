@@ -40,12 +40,15 @@ mat-card {
 
   mat-card-actions {
     padding: 0;
+    margin-bottom: 0 !important;
   }
 
   .date {
     color: #333333;
   }
 }
+
+
 
 .removeImg {position: absolute; top:30px; right:30px;}
 

@@ -1,6 +1,6 @@
 .task-row {
   display: block;
-  margin-bottom: 40px;
+  margin-top: 60px;
 }
 
 
@@ -16,6 +16,31 @@
 }
 
 
+.task_list {
+  .task-row {
+    h4 {
+      padding: 6px 10px;
+      background-color: #ededed;
+      border: 2px dashed #919191;
+      border-radius: 6px;
+    }
+    &.empty {
+      h4 {
+        
+        border: 2px dashed #b5b5b5;
+        background-color: #e2e2e2 !important;
+      }
+    }
+  }
+}
+
+.category_input {
+  .material-icons {font-size: 40px;    margin-right: 10px;}
+  transform: translateX(0);
+  &.no-category-selected {
+    transform: translateX(-50px) !important;
+  }
+}
 
 svg {
   // position: absolute;
