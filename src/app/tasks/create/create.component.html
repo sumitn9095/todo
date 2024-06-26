@@ -1,7 +1,7 @@
-<form class="input-big" [formGroup]="task_add" (ngSubmit)="task_create()">
-  <mat-form-field class="input-search" appearance="fill">
+<form class="input-big flex items-center" [formGroup]="task_add" (ngSubmit)="task_create()">
+  <mat-form-field class="flex-auto" appearance="fill">
     <mat-label>Enter your Task name</mat-label>
-    <input matInput title="Task Name" type="text" [(ngModel)]="value" formControlName="taskname" />
+    <input matInput title="Task Name" type="text" class="taskNameClass" [(ngModel)]="value" formControlName="taskname" name="taskname" />
     <button matSuffix mat-icon-button type="button" *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
       <mat-icon>close</mat-icon>
     </button>
