@@ -3,6 +3,10 @@ export class UrlConstants {
     public static signup: string = "register";
     public static signin: string = "signin";
     public static verifyEmail: string = "verifyemail";
+    public static reset: string = "reset";
+    public static forgotpassword: string = "forgotpassword";
+    public static forgotpasswordreset: string = "forgotpasswordreset";
+    public static verifyForgetPassword: string = "verifyforgetpassword";
     // Tasks
     public static userTasks: string = "usertasks";
     public static userTasksSearch: string = "usertasksearch";

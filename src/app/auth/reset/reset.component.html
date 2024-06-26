@@ -1,26 +1,22 @@
 <app-header></app-header>
 <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card class="box" *ngIf="!isSignUpSubmitted">
+    <mat-card class="box" *ngIf="!isResetSubmitted">
       <mat-card-header class="login-title">
-        <mat-card-title>Signup</mat-card-title>
+        <mat-card-title>Reset Password</mat-card-title>
       </mat-card-header>
-      <form class="example-form" [formGroup]="signUpForm" (ngSubmit)="submitSignUpForm($event)">
+      <form class="example-form" [formGroup]="resetForm" (ngSubmit)="submitResetForm($event)">
         <mat-card-content>
             <div class="login-box">
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Username" formControlName="username" >
-                <mat-error *ngIf="cn['username'].errors?.['required']">Username is required.</mat-error>
-                <mat-error *ngIf="cn['username'].errors?.['minlength'] && cn['username'].touched">Username too short</mat-error>
-                <mat-error *ngIf="cn['username'].errors?.['maxlength'] && cn['username'].touched">Username too long</mat-error>
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Email" formControlName="email" >
-                <mat-error *ngIf="cn['email'].errors?.['required']">Email is required.</mat-error>
-                <mat-error *ngIf="cn['email'].errors?.['email'] && cn['email'].touched">Invalid email format.</mat-error>
-              </mat-form-field>
+                <mat-form-field class="!block width-fluid">
+                    <input matInput placeholder="Password" [type]="passIsVisible0 ? 'text' : 'password'" formControlName="password0">
+                    <mat-icon *ngIf="passIsVisible0" (click)="passIsVisible0 = false" matSuffix>visibility</mat-icon>
+                    <mat-icon *ngIf="!passIsVisible0" (click)="passIsVisible0 = true" matSuffix>visibility_off</mat-icon>
+                    <!-- <mat-icon *ngIf="!passIsVisible0" matSuffix>visibility_off</mat-icon> -->
+                    <mat-error [hidden]="cn['password'].status == 'VALID'">Password is required</mat-error>
+                </mat-form-field>
               <div #passdiv class="width-fluid animate__animated">
                 <mat-form-field class="!block width-fluid">
-                  <input matInput placeholder="Password" [type]="passIsVisible ? 'text' : 'password'" formControlName="password">
+                  <input matInput placeholder="New Password" [type]="passIsVisible ? 'text' : 'password'" formControlName="password">
                   <mat-icon *ngIf="passIsVisible" (click)="passIsVisible = false" matSuffix>visibility</mat-icon>
                   <mat-icon *ngIf="!passIsVisible" (click)="passIsVisible = true" matSuffix>visibility_off</mat-icon>
                   <!-- <mat-icon *ngIf="!passIsVisible" matSuffix>visibility_off</mat-icon> -->
@@ -38,17 +34,17 @@
         </mat-card-content>
         <!-- <a (click)="formStatus()">Status</a>
         {{passwordMatch}}--passwordMatch -->
-        <button title="Signup" type="submit" [disabled]="cn['username'].status !== 'VALID' || cn['email'].status !== 'VALID' || (cn['password'].value === '') && (cn['password2'].value === '') || !passwordMatch" mat-stroked-button color="accent" class="btn-block">Signup</button>
+        <button title="Signup" type="submit" [disabled]="cn['username'].status !== 'VALID' || cn['email'].status !== 'VALID' || (cn['password'].value === '') && (cn['password2'].value === '') || !passwordMatch" mat-stroked-button color="accent" class="btn-block">Reset</button>
       </form>
     </mat-card>
-    <div *ngIf="isSignUpSubmitted">
+    <div *ngIf="isResetSubmitted">
       <div>
-        <h4>Verification Email sent to {{signUpForm.value.email}}</h4>
+        <h4>Verification Email sent to {{resetForm.value.email}}</h4>
       </div>
     </div>
   </div>
 
-  <ng-template #modalemplate [ngIf]="isSignUpSubmitted">
+  <ng-template #modalemplate [ngIf]="isResetSubmitted">
     <app-modal [infoModal]="infoModal" >
         <header><h4>{{infoModal.title}}</h4></header>
         <body>

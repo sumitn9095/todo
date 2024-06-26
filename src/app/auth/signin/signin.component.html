@@ -18,6 +18,16 @@
           </div>
         </mat-card-content>
         <button title="Signup" type="submit" mat-stroked-button color="accent" class="btn-block">Log In</button>
+        <a (click)="forgotPassword()">Forgot Password</a>
       </form>
     </mat-card>
   </div>
+
+  <ng-template #modalemplate [ngIf]="infoModal.show || infoModal.error">
+    <app-modal [infoModal]="infoModal" >
+        <header><h4>{{infoModal.title}}</h4></header>
+        <body>
+            <p>{{infoModal.message}}</p>
+        </body>
+    </app-modal>
+  </ng-template>

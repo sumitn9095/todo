@@ -5,18 +5,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from 'src/app/common.service';
 import { Router } from '@angular/router';
 import { Infomodal } from 'src/app/utility/infomodal';
-import { confirmPasswordValidator } from './confirm-password.validator';
+// import { confirmPasswordValidator } from './confirm-password.validator';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  templateUrl: './reset.component.html',
+  styleUrls: ['./reset.component.scss']
 })
-export class SignupComponent implements OnInit {
-  public isSignUpSubmitted : boolean = false;
-  public signUpForm! : FormGroup;
+export class ResetComponent implements OnInit {
+  public isResetSubmitted : boolean = false;
+  public resetForm! : FormGroup;
   infoModal: Infomodal = {};
+  passIsVisible0:boolean=true;
   passIsVisible:boolean=true;
   passIsVisible2:boolean=true;
   passwordMatch: boolean = false;
@@ -26,14 +27,13 @@ export class SignupComponent implements OnInit {
   @ViewChild ('passdiv') passdiv! : ElementRef;
 
   ngOnInit(): void {
-    this.signUpForm = this._fb.group({
-      'username' : ['',[Validators.required, Validators.maxLength(60), Validators.minLength(3)]],
-      'email' : ['',[Validators.required, Validators.email]],
+    this.resetForm = this._fb.group({
+      'password0' : ['',[Validators.required]],
       'password' : ['',[Validators.required]],
       'password2' : ['',[Validators.required]]
     });
 
-    this.signUpForm.valueChanges
+    this.resetForm.valueChanges
     .pipe(
       distinctUntilChanged(),
       debounceTime(1500)
@@ -59,35 +59,21 @@ export class SignupComponent implements OnInit {
     })
   }
 
-  formStatus(){
-    console.log("signUpForm.status",this.cn['password'].value)
-  }
-
-  // comparePassword: ValidatorFn = (
-  //   control: AbstractControl
-  // ): ValidationErrors | null => {
-  //   return this.signUpForm.value.password === this.signUpForm.value.password2 ? null : {PasswordNoMatch:true};
-  // };
-
-  // comparePassword() : ValidationErrors | null {
-  //   return this.signUpForm.value.password === this.signUpForm.value.password2 ? null : {PasswordNoMatch:true}
-  // }
-
   get cn(){
-    return this.signUpForm.controls;
+    return this.resetForm.controls;
   }
 
-  submitSignUpForm(val:any){
-    if(this.signUpForm.status == 'INVALID') return;
-    this._auth.signUp(this.signUpForm.value).subscribe({
+  submitResetForm(val:any){
+    if(this.resetForm.status == 'INVALID') return;
+    this._auth.reset(this.resetForm.value).subscribe({
       next: (w:any)=>{
+        this.isResetSubmitted = true;
         this._cs.openSnackBar("Signed Up", "Success");
-        //this._router.navigate(["../signin"]);
-        this.isSignUpSubmitted = true;
+        this.isResetSubmitted = true;
         this.infoModal = {
           show: true,
-          title: `Verification Email sent to ${this.signUpForm.value.email}`,
-          message: "Please goto your email inbox and click the link sent in the Verification email.",
+          title: `Account Password Reset successful for ${this.resetForm.value.email}`,
+          message: `Please goto login page to signin with new password`,
           infoModalType: "userCreated",
           actions: 'close'
         }

@@ -31,8 +31,8 @@ export class VerifyComponent implements OnInit, AfterViewInit {
     this._ar.params.subscribe((params: Params)=>{
       let email = params['email'];
       console.log("email",email);
-     let verifySecret = params['secret'];
-      let obj = {email, verifySecret}
+      let verifySecret = params['secret'];
+      let obj = {email, verifySecret};
       console.log("verify",obj);
       this._auth.verify(obj).subscribe({
         next: (res:any) => {

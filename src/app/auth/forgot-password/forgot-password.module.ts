@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SignupRoutingModule } from './signup-routing.module';
-import { SignupComponent } from './signup.component';
+import { ForgotPasswordRoutingModule } from './forgot-password-routing.module';
+import { ForgotPasswordComponent } from './forgot-password.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,11 +13,11 @@ import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
-    SignupComponent
+    ForgotPasswordComponent
   ],
   imports: [
     CommonModule,
-    SignupRoutingModule,
+    ForgotPasswordRoutingModule,
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatCardModule,
     MatButtonModule, MatInputModule,
@@ -26,4 +26,4 @@ import {MatIconModule} from '@angular/material/icon';
     SharedModule
   ]
 })
-export class SignupModule { }
+export class ForgotPasswordModule { }

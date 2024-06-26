@@ -20,6 +20,19 @@ export class AuthService {
   verify = (obj:{}) => {
     return this._http.post(`${this.uri}${UrlConstants.verifyEmail}`,obj);
   }
+  reset = (obj:{}) => {
+    return this._http.post(`${this.uri}${UrlConstants.reset}`,obj);
+  }
+  forgotPassword = (obj:{}) => {
+    return this._http.post(`${this.uri}${UrlConstants.forgotpassword}`,obj);
+  }
+  forgotPasswordReset = (obj:{}) => {
+    return this._http.post(`${this.uri}${UrlConstants.forgotpasswordreset}`,obj);
+  }
+  verifyForgetPassword = (obj:{}) => {
+    return this._http.post(`${this.uri}${UrlConstants.verifyForgetPassword}`,obj);
+  }
+  
   signOut = () => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('todo_token');
