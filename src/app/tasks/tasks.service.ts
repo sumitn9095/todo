@@ -55,36 +55,35 @@ downloadChart(sd:any) {
   //   this.bs.next('task_edited');
   // }
 
-  tasksAdd(taskObj: Task): Observable<Task> {
-    taskObj.isOver = false;
-    taskObj.email = this.user.email;
-    console.log('taskObj', taskObj);
-    return this._http.post<Task>(`${this.uri}add`, taskObj);
-  }
+  // tasksAdd(taskObj: Task): Observable<Task> {
+  //   taskObj.isOver = false;
+  //   taskObj.email = this.user.email;
+  //   console.log('taskObj', taskObj);
+  //   return this._http.post<Task>(`${this.uri}add`, taskObj);
+  // }
 
-  taskEdit(taskId: string, newTaskname: any) {
-    let taskname = { taskname: newTaskname };
-    console.log('task service checking task edit', taskId, newTaskname);
-    return this._http.put<Task>(`${this.uri}edit/${taskId}`, taskname, {
-      headers: this.header,
-    });
-  }
+  // taskEdit(taskId: string, newTaskname: any) {
+  //   let taskname = { taskname: newTaskname };
+  //   console.log('task service checking task edit', taskId, newTaskname);
+  //   return this._http.put<Task>(`${this.uri}edit/${taskId}`, taskname, {
+  //     headers: this.header,
+  //   });
+  // }
 
-  taskStatus(taskId: string, isOver: boolean) {
-    let task_status = { isOver: isOver };
-    return this._http.put<Task>(`${this.uri}status/${taskId}`, task_status);
-  }
+  // taskStatus(taskId: string, isOver: boolean) {
+  //   let task_status = { isOver: isOver };
+  //   return this._http.put<Task>(`${this.uri}status/${taskId}`, task_status);
+  // }
 
-  taskDelete(taskIdToDelete: any): Observable<Task> {
-    console.log(`task to be deleted is ${taskIdToDelete}`);
-    return this._http.delete<Task>(`${this.uri}usertaskdelete/${taskIdToDelete}`);
-  }
+  
 
-  taskSearch(taskName: any): Observable<Task> {
-    return this._http.get<Task>(`${this.uri}`, { headers: this.header });
-  }
+  // taskSearch(taskName: any): Observable<Task> {
+  //   return this._http.get<Task>(`${this.uri}`, { headers: this.header });
+  // }
 
-  //---------------------------------------
+
+
+  //---------- NEW -----------------------
 
   userTasks(obj:{}): Observable<any> {
     return this._http.post<any>(`${this.uri}${UrlConstants.userTasks}`, obj, { headers: this.header });
@@ -124,7 +123,13 @@ downloadChart(sd:any) {
     form.append('priority', obj.priority);
     form.append('subTasks', obj.subTasks);
     form.append('taskname', obj.taskname);
+    form.append('id', obj._id);
     return this._http.post<any>(`${this.uri}${UrlConstants.userTaskDetailsSave}`, form, {headers: hdr});
+  }
+
+  taskDelete(taskIdToDelete: any): Observable<Task> {
+    console.log(`task to be deleted is ${taskIdToDelete}`);
+    return this._http.delete<Task>(`${this.uri}usertaskdelete/${taskIdToDelete}`);
   }
 
   userRemoveImg(taskId:string){

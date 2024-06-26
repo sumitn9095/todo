@@ -5,6 +5,9 @@ import { environment } from 'src/environments/environment';
 import { Infomodal } from 'src/app/utility/infomodal';
 import { CommonConstants } from 'src/app/utility/CommonConstants';
 import { CommonService } from 'src/app/common.service';
+import { Store } from '@ngxs/store';
+import { ChangeStatus, DeleteTask, EditTask } from '../../shared/task.actions';
+
 @Component({
   selector: 'app-task-template',
   templateUrl: './task-template.component.html',
@@ -23,12 +26,12 @@ export class TaskTemplateComponent implements OnInit {
   public user:any;
   public env:any;
 
-  constructor(private _cs:CommonService, private _taskService: TasksService, private _router:Router) {}
+  constructor(private _cs:CommonService, private _taskService: TasksService, private _router:Router, private store: Store) {}
 
   ngOnInit(): void {
     this.env = environment.base_url;
     this.user = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log("tasklist-----------",this.tasklist);
+   // console.log("tasklist-----------",this.tasklist);
   }
 
   checkDetails(id:any){
@@ -36,7 +39,7 @@ export class TaskTemplateComponent implements OnInit {
   }
 
   closeInfoModal(data:any){
-    console.log("closeInfoModal",data);
+    //console.log("closeInfoModal",data);
     this.infoModal = {show : false};
   }
 
@@ -49,7 +52,7 @@ export class TaskTemplateComponent implements OnInit {
       error: (err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        console.log("keywordHasAuth",errorMssg,keywordHasAuth)
+       // console.log("keywordHasAuth",errorMssg,keywordHasAuth)
         if(keywordHasAuth) {
           this.infoModal = this._cs.openModal('loginTimeOut');
         } else {
@@ -69,16 +72,17 @@ export class TaskTemplateComponent implements OnInit {
       id: taskId,
       newTaskName: newTaskName
     }
-    console.log("task-edt",task);
+   // console.log("task-edt",task);
     this._cs.openSnackBar("Processing...",);
-    this._taskService.userTaskEdit(obj).subscribe({
+
+    this.store.dispatch(new EditTask(obj)).subscribe({
       next: (w:any) => {
         this._cs.openSnackBar("Updated Task name", "Success");
       },
       error: (err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        console.log("keywordHasAuth",errorMssg,keywordHasAuth)
+        //console.log("keywordHasAuth",errorMssg,keywordHasAuth)
   
         if(keywordHasAuth) {
           this.infoModal = this._cs.openModal('loginTimeOut');
@@ -91,20 +95,25 @@ export class TaskTemplateComponent implements OnInit {
         this._taskService.bs.next('task_edited');
         this.taskUpdate.emit('task_status_updated')
       }
-    });
+    })
+
+    //this._taskService.userTaskEdit(obj).subscribe({});
+
+    //this.store.dispatch(new GetTasks(this.taskPayload));
   }
 
   task_delete(taskId: string) {
     this._cs.openSnackBar("Processing...");
-    this._taskService.taskDelete(taskId).subscribe({
+    this.store.dispatch(new DeleteTask(taskId)).subscribe({
       next: (a:any) => {
+        //console.log("Task deleted",a)
         this._cs.openSnackBar("Task is Deleted", "Success");
       },
       error: (err:any) => {
+        //console.log("Task delete failed",err)
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        console.log("keywordHasAuth",errorMssg,keywordHasAuth)
-
+        //console.log("keywordHasAuth",errorMssg,keywordHasAuth)
         if(keywordHasAuth) {
           this.infoModal = this._cs.openModal('loginTimeOut');
         } else {
@@ -117,24 +126,46 @@ export class TaskTemplateComponent implements OnInit {
         this.taskUpdate.emit('task_status_updated')
       }
     });
+
+    // this._taskService.taskDelete(taskId).subscribe({
+    //   next: (a:any) => {
+    //     this._cs.openSnackBar("Task is Deleted", "Success");
+    //   },
+    //   error: (err:any) => {
+    //     let errorMssg = err?.error?.message;
+    //     let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+    //     console.log("keywordHasAuth",errorMssg,keywordHasAuth)
+
+    //     if(keywordHasAuth) {
+    //       this.infoModal = this._cs.openModal('loginTimeOut');
+    //     } else {
+    //       this.infoModal = this._cs.openModal('error');
+    //     }
+    //     this.infoModal.message = errorMssg;
+    //   },
+    //   complete: () => {
+    //     this._taskService.bs.next('task_deleted');
+    //     this.taskUpdate.emit('task_status_updated')
+    //   }
+    // });
   }
 
   goto(cat:string) {
-    console.log("cate : ",cat);
+    //console.log("cate : ",cat);
     let ght = cat.toString().toLowerCase();
     this._router.navigate([`./tasks/${ght}`], { queryParamsHandling : 'merge'});
   }
 
   task_status(taskId: string, isOver: boolean) {
     this._cs.openSnackBar('Processing...');
-    this._taskService.userTaskStatusChange(taskId, isOver).subscribe({
+    this.store.dispatch(new ChangeStatus(taskId, isOver)).subscribe({
       next: (w:any) => {
         this._cs.openSnackBar(`Task Status Updated to ${isOver ? 'Over' : 'Resumed'}`, "Success");
       },
       error: (err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        console.log("keywordHasAuth",errorMssg,keywordHasAuth)
+        //console.log("keywordHasAuth",errorMssg,keywordHasAuth)
 
         if(keywordHasAuth) {
           this.infoModal = this._cs.openModal('loginTimeOut');
@@ -148,6 +179,7 @@ export class TaskTemplateComponent implements OnInit {
         this._taskService.bs.next('task_status_updated');
         this.taskUpdate.emit('task_status_updated')
       }
-   } );
+    })
+    // this._taskService.userTaskStatusChange(taskId, isOver).subscribe({} );
   }
 }

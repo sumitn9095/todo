@@ -32,6 +32,10 @@ import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload'
 import { saveAs } from 'file-saver';
 import { Infomodal } from '../utility/infomodal';
 import { ModalComponent } from '../shared/modal/modal.component';
+import { Select, Store } from '@ngxs/store';
+import { EditTaskDetails, GetTasks } from '../shared/task.actions';
+import { TaskApiState } from '../shared/task.state';
+
 export interface DialogData {
   taskDetails: any;
 }
@@ -71,9 +75,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   // infoModalType : string = '';
 
+  public categorySelectedDefaultArr:any[]=[]
+
   processUploadTasks : boolean = false;
   processDownloadTasks : boolean = false;
 
+
+  @Select(TaskApiState.selectTasks) tasks$! : Observable<any>
   constructor(
     private _taskService: TasksService,
     private _auth: AuthService,
@@ -81,13 +89,16 @@ export class TasksComponent implements OnInit, AfterViewInit {
     private _snackBar: MatSnackBar,
     private _router : Router,
     private _ar : ActivatedRoute,
-    private _cs : CommonService
+    private _cs : CommonService,
+    private store: Store
   ) {
    
   }
 
   @ViewChild('userData') 'userData': ElementRef;
   @ViewChild('modalemplate') 'modalemplate' : ModalComponent;
+  // @ViewChild('category_input') 'category_input' : ElementRef;
+  
 
   openChartLine(dialogTempRef: any) {
     this.tasksChartOpened = true;
@@ -107,8 +118,17 @@ export class TasksComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('user') || {} as any);
     this.token = sessionStorage.getItem('token') as string;
-    console.log('this.tasks', this.tasks);
+    //console.log('this.tasks', this.tasks);
     this.fetchCategories();
+
+    this.tasks$.subscribe({
+      next: ((j:any) => {
+        //console.log("ALL TASKS >>>", j);
+        this.tasks_l(j.taskss);
+      })
+    });
+
+
   }
   ngAfterViewInit() : void {
     this._ar.params.subscribe((params: Params) => {
@@ -153,7 +173,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
       error: ((err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        console.log("keywordHasAuth",errorMssg,keywordHasAuth);
+        //console.log("keywordHasAuth",errorMssg,keywordHasAuth);
         if(keywordHasAuth) {
           this.infoModal = this._cs.openModal('loginTimeOut');
         } else {
@@ -178,10 +198,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   catchError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
-      console.log('this is client side error');
+      //console.log('this is client side error');
       this.errorMsg = `Error: ${error.error.message}`;
     } else {
-      console.log('this is server side error');
+     // console.log('this is server side error');
       this.errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
     }
     return throwError(this.errorMsg);
@@ -190,7 +210,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   delete_last(taskIdToDelete: number) {
     this._taskService.taskDelete(taskIdToDelete).subscribe({
       next: (task:any) => {
-        console.log(`${task} is deleted`);
+        //console.log(`${task} is deleted`);
         this.getUserTasks();
       },
       error: ((err:any) => {
@@ -206,57 +226,59 @@ export class TasksComponent implements OnInit, AfterViewInit {
     });
   }
 
-  task_edit(taskId: string, newTaskName: any) {
-    this._cs.openSnackBar('Proccessing...');
-    this._taskService.taskEdit(taskId, newTaskName).subscribe({
-      next: (w:any) => {
-        this.getUserTasks();
-        this._cs.openSnackBar("Task Edited", "Success");
-      },
-      error: ((err:any) => {
-        let errorMssg = err?.error?.message;
-        let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
-        if(keywordHasAuth) {
-          this.infoModal = this._cs.openModal('loginTimeOut');
-        } else {
-          this.infoModal = this._cs.openModal('error');
-        }
-        this.infoModal.message = errorMssg;
-      })
-    });
-  }
+  // task_edit(taskId: string, newTaskName: any) {
+  //   this._cs.openSnackBar('Proccessing...');
+  //   this._taskService.taskEdit(taskId, newTaskName).subscribe({
+  //     next: (w:any) => {
+  //       this.getUserTasks();
+  //       this._cs.openSnackBar(w.message, "Success");
+  //     },
+  //     error: ((err:any) => {
+  //       let errorMssg = err?.error?.message;
+  //       let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
+  //       if(keywordHasAuth) {
+  //         this.infoModal = this._cs.openModal('loginTimeOut');
+  //       } else {
+  //         this.infoModal = this._cs.openModal('error');
+  //       }
+  //       this.infoModal.message = errorMssg;
+  //     })
+  //   });
+  // }
 
   tasks_l(task_list_container: any) {
     this.tasks = [];
     this.tasks_over = [];
     this.tasks_today = [];
-    console.log(task_list_container, 'task_list_container');
-    task_list_container.map((d: any) => {
-      if (d.isOver == false) {
-        
-        let isTaskToday = moment().isSame(d.dueDate, 'day');
-        if(isTaskToday) {
-          this.tasks_today.push(d);
-         // console.log("Task-->>",d)
-           console.log(d.taskname, 'is Today');
+    //console.log(task_list_container, 'task_list_container');
+    if(task_list_container !== undefined && task_list_container.length) {
+      task_list_container.map((d: any) => {
+        if (d.isOver == false) {
+          
+          let isTaskToday = moment().isSame(d.dueDate, 'day');
+          if(isTaskToday) {
+            this.tasks_today.push(d);
+          // console.log("Task-->>",d)
+            //console.log(d.taskname, 'is Today');
+          } else {
+            this.tasks.push(d);
+            // ------------------------------
+            let date1 = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
+            let date2 = formatDate(d.date, 'yyyy-MM-dd', 'en_US');
+            // if (date1 > date2) {
+            //   console.log(d.taskname, ' is ---date1 is greater----');
+            // } else {
+            //   console.log(d.taskname, ' is ---date1 is lesser-----');
+            // }
+          }
         } else {
-          this.tasks.push(d);
-          // ------------------------------
-          let date1 = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
-          let date2 = formatDate(d.date, 'yyyy-MM-dd', 'en_US');
-          // if (date1 > date2) {
-          //   console.log(d.taskname, ' is ---date1 is greater----');
-          // } else {
-          //   console.log(d.taskname, ' is ---date1 is lesser-----');
-          // }
+          this.tasks_over.push(d);
         }
-      } else {
-        this.tasks_over.push(d);
-      }
-    });
-    this.tasks.reverse();
-    this.tasks_over.reverse();
-    this.tasks_today.reverse();
+      });
+      this.tasks.reverse();
+      this.tasks_over.reverse();
+      this.tasks_today.reverse();
+    }
   }
 
   querySearched(query?:any){
@@ -292,7 +314,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
         
       },
       error: (err:any)=>{
-        console.log("downloadTasks",err);
+       // console.log("downloadTasks",err);
         this.processDownloadTasks = false;
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
@@ -315,17 +337,17 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   selectFiles(e:any): void {
     let selectedFiles = e.target.files[0];
-    console.log("selectFiles----",selectedFiles);
+   // console.log("selectFiles----",selectedFiles);
     this._cs.openSnackBar('Proccessing...');
     this.processUploadTasks = true;
     this._taskService.uploadTasks(selectedFiles, this.user?.email).subscribe({
       next: (w:any) => {
-        this._cs.openSnackBar("Tasks Excel Uploaded", "Success");
+        this._cs.openSnackBar(w.message, "Success");
         this.processUploadTasks = false;
       },
       error: (err:any)=>{
         this.processUploadTasks = false;
-        console.log("downloadTasks",err);
+       // console.log("downloadTasks",err);
         let errorMssg = err?.error?.message;
         let keywordHasAuth = err?.error?.message ? CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase()) : false;
         // if(err?.error?.message && keywordHasAuth) {
@@ -349,7 +371,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   checkTaskCountError(error:any) {
-    console.log("checkTaskCountError",error)
+    //console.log("checkTaskCountError",error)
     this.infoModal = this._cs.openModal('taskCountError');
     this.infoModal.message = error.error.message;
   }
@@ -361,14 +383,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
       query : this.query,
       category : categoryCapitalized
     };
-    var fetchUserTasks = this._taskService.userTasks(this.taskPayload);
+    //var fetchUserTasks = this._taskService.userTasks(this.taskPayload);
+    var fetchUserTasks = this.store.dispatch(new GetTasks(this.taskPayload));
     this.fetchUserTasksPiped = fetchUserTasks;
     this.fetchUserTasksPiped.subscribe({
       next: (w:any)=>{
-        //console.log("-------------w",w,this.query);
-        // if(!this.category?.length) this.tasks_l(w.data);
-        // if(this.category?.length) this.tasks_l(w);
-        this.tasks_l(w.data);
       },
       error: (err:any)=>{
         this.tasks_loaded = 'err';
@@ -488,7 +507,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   // }
 
   checkDetailsById(id:any){
-    console.log('Task ID',id);
+    //console.log('Task ID',id);
     this.openTaskDetails(id);
   }
 
@@ -508,8 +527,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
           categories.push(nms);
         });
         this._taskService.userTaskInfoAndDetail(id).subscribe({
-          next: (q:any)=>{
-            if(q.taskDetails && q.taskDetails.category.length) this._taskService.categorySelectedByDefault.next(q.taskDetails.category);
+          next: (q:any) => {
+            if(q.taskDetails && q.taskDetails.category.length) {
+              this._taskService.categorySelectedByDefault.next(q.taskDetails.category);
+            }
             q.data.categories = categories;
             dialogRef = this._dialog.open(TaskDetails, {
               data: {
@@ -517,22 +538,38 @@ export class TasksComponent implements OnInit, AfterViewInit {
               },
               width: '550px',
             });
+
+            dialogRef.afterOpened().subscribe((result:any) => {
+              this._taskService.categorySelected.subscribe({
+                next: (q:any) => {
+                 // console.log("this._taskService.categorySelected", q);
+                }
+              })
+              this._taskService.categorySelectedByDefault.next(q.data.category);
+            });
+
             dialogRef.afterClosed().subscribe((result:any) => {
-              console.log("taskDetailsModal - result",result);
+              //console.log("taskDetailsModal - result",result);
               if (result != undefined) {
                 this._taskService.categorySelected.subscribe({
                   next: (q:any) => {
-                      result.taskDetails.category = q;
+                    //console.log("categorySelected -- After modal close",q);
+                      // if(q.taskDetails.category !== undefined) this._taskService.categorySelected.next(q.taskDetails.category);
+                      if(q.length || result.taskDetails !== null) result.taskDetails.category = q;
+                      if( result.taskDetails !== null){
                       this._taskService.taskPhotoBs.subscribe({
                         next: (file:any) => {
-                          if(result.taskDetails !== null) this.saveTaskDetails(result.taskDetails, file);
+                         // console.log("RESULT: " , result)
+                         if(result.taskDetails !== null || result !== null) {
+                            this.saveTaskDetails(result.taskDetails, file);
+                          }
                         }, error: (err:any) => {
                           this._cs.openSnackBar(err.error.message, "Error")
                         }, complete: ()=>{
                           this.getUserTasks();
                         }
                       })
-                    
+                    }
                   }, error: (err:any) => {
                     this._cs.openSnackBar(err.error.message, "Error")
                   }, complete: ()=>{
@@ -541,16 +578,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
                 });
                 result = null;
               }
-              this._taskService.categorySelected.next([]);
+              //this._taskService.categorySelected.next([]);
             });
-            dialogRef.afterOpened().subscribe((result:any) => {
-              this._taskService.categorySelected.subscribe({
-                next: (q:any) => {
-                  console.log("this._taskService.categorySelected", q);
-                }
-              })
-              this._taskService.categorySelectedByDefault.next(q.data.category);
-            });
+
           },
           error: (err:any)=>{
             this._cs.openSnackBar(err.error.message, "Error")
@@ -572,9 +602,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   saveTaskDetails(result:any, file:any){
-    this._taskService.userTaskDetailsSave(result, file).subscribe({
+    this.store.dispatch(new EditTaskDetails(result, file)).subscribe({
       next: (w:any)=>{
         this.getUserTasks();
+        this._cs.openSnackBar(w.message, "Success");
       },
       error: (err:any)=>{
         let errorMssg = err?.error?.message;
@@ -591,9 +622,17 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
       }
     })
+
+    // this._taskService.userTaskDetailsSave(result, file).subscribe({})
   }
+
+  navigateToTasks() {
+    this._router.navigate([`./tasks`], { queryParamsHandling : 'merge'});
+  }
+
+
   viewCategory(selectedCat:any){
-    console.log("category----",selectedCat.value);
+    //console.log("category----",selectedCat.value);
     var sv = selectedCat.value;
     if(sv == null) {
       //this.category = null;
@@ -657,7 +696,8 @@ export class TaskDetails {
     this._task.categorySelectedByDefault.subscribe({
       next: (q:any) => {
         this.fruits = q;
-        console.log('fruits', this.fruits)
+        this._task.categorySelected.next(this.fruits);
+       // console.log('categorySelectedByDefault -- ', this.fruits)
       }, error: (err:any) => {
         let errorMssg = err?.error?.message;
         let keywordHasAuth = CommonConstants.matchKeywordUnAuth(errorMssg.toLowerCase());
@@ -677,7 +717,7 @@ export class TaskDetails {
   }
 
   handleTaskPhoto(e :any) {
-    console.log("file <<>>", e.target.files[0]);
+//console.log("file <<>>", e.target.files[0]);
     //this._task.taskPhotoBs.next(this.taskPhoto);
     this._task.taskPhotoBs.next( e.target.files[0]);
     var newFile = new File([e.target.files[0]], "taskPhoto", {type: ".png"});
@@ -717,6 +757,7 @@ export class TaskDetails {
     this.fruits.push(event.option.viewValue);
     this.fruitInput.nativeElement.value = '';
     this.fruitCtrl.setValue(null);
+    //console.log("this.fruits",this.fruits)
     this._task.categorySelected.next(this.fruits);
   }
   private _filter(value: string): string[] {
