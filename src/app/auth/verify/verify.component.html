@@ -1,6 +1,6 @@
 <app-header></app-header>
 <ng-template #modalemplate [ngIf]="infoModal.show || infoModal.error">
-    <app-modal [infoModal]="infoModal"  >
+    <app-modal [infoModal]="infoModal"   (modalCloseInit)="closeInfoModal($event)">
         <header><h4>{{infoModal.title}}</h4></header>
         <body>
             <div>

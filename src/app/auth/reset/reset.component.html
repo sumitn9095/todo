@@ -45,7 +45,7 @@
   </div>
 
   <ng-template #modalemplate [ngIf]="isResetSubmitted">
-    <app-modal [infoModal]="infoModal" >
+    <app-modal [infoModal]="infoModal"  (modalCloseInit)="closeInfoModal($event)">
         <header><h4>{{infoModal.title}}</h4></header>
         <body>
             <p>{{infoModal.message}}</p>

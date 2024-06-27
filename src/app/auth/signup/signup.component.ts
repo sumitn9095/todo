@@ -77,6 +77,11 @@ export class SignupComponent implements OnInit {
     return this.signUpForm.controls;
   }
 
+  closeInfoModal(data:any){
+    //console.log("closeInfoModal",data);
+    this.infoModal = {show : false};
+  }
+
   submitSignUpForm(val:any){
     if(this.signUpForm.status == 'INVALID') return;
     this._auth.signUp(this.signUpForm.value).subscribe({

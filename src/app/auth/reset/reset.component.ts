@@ -63,6 +63,11 @@ export class ResetComponent implements OnInit {
     return this.resetForm.controls;
   }
 
+  closeInfoModal(data:any){
+    //console.log("closeInfoModal",data);
+    this.infoModal = {show : false};
+  }
+
   submitResetForm(val:any){
     if(this.resetForm.status == 'INVALID') return;
     this._auth.reset(this.resetForm.value).subscribe({

@@ -25,10 +25,14 @@ export class SigninComponent implements OnInit {
     });
   }
 
- 
 
   get cn() {
     return this.signInForm.controls;
+  }
+
+  closeInfoModal(data:any){
+    //console.log("closeInfoModal",data);
+    this.infoModal = {show : false};
   }
 
   forgotPassword(){

@@ -60,4 +60,9 @@ export class VerifyComponent implements OnInit, AfterViewInit {
       })
     })
  }
+
+ closeInfoModal(data:any){
+  //console.log("closeInfoModal",data);
+  this.infoModal = {show : false};
+}
 }

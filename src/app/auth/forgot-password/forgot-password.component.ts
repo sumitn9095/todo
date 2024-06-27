@@ -21,6 +21,8 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   passIsVisible:boolean=true;
   passIsVisible2:boolean=true;
   passwordMatch: boolean = false;
+  email:string='';
+  resetSecret:string='';
 
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _r2: Renderer2, private _ar : ActivatedRoute) { }
 
@@ -31,30 +33,25 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
       // this.verificationMessage = 'User verification in progress';
       this._ar.params.subscribe((params: Params) => {
         let email = params['email'];
-        let forgotPasswordSecret = params['secret'];
+        let resetSecret = params['secret'];
         console.log("email",email);
-        if(forgotPasswordSecret !== undefined && email !== undefined) {
-          let obj = {email, forgotPasswordSecret};
+        if(resetSecret !== undefined && email !== undefined) {
+          let obj = {email, resetSecret};
           this._auth.verifyForgetPassword(obj).subscribe({
             next: (res:any) => {
               this.isForgetPasswordResetMode = true;
+              this.email = email;
+              this.resetSecret = resetSecret;
               this.infoModal = {
                 show: true,
-                title: "User Verification Status",
+                title: "Forgot Password Verification Status",
                 infoModalType: "userVerified",
                 message: res.message,
-                actions: "redirect"
-              };
-            },
-            error: (err:any) => {
-              this.infoModal = {
-                error: true,
-                title: "User Verification Status Error",
-                infoModalType: "error",
-                message: err.error.message,
-                type: "error",
                 actions: "close"
               };
+            },
+            error: (err:any)=>{
+              this._cs.openSnackBar(err.error.message, "Error");
             }
           })
         }
@@ -62,29 +59,23 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.forgotPasswordForm = this._fb.group({
+      'email' : ['',[Validators.required, Validators.email]]
+    });
     this.forgotPasswordResetForm = this._fb.group({
       'password' : ['',[Validators.required]],
       'password2' : ['',[Validators.required]]
     });
 
-    this.forgotPasswordForm = this._fb.group({
-      'email' : ['',[Validators.required, Validators.email]]
-    });
-
-    this.forgotPasswordForm.valueChanges
+    this.forgotPasswordResetForm.valueChanges
     .pipe(
       distinctUntilChanged(),
       debounceTime(1500)
     )
     .subscribe({
       next: (a:any) => {
-        console.log
         if(a.password === a.password2) {
           this.passwordMatch = true;
-          this._r2.addClass(this.passdiv.nativeElement,"animate__bounceIn");
-          setTimeout(() => {
-            this._r2.removeClass(this.passdiv.nativeElement,"animate__bounceIn");
-          }, 1000);
         }
         else {
           this.passwordMatch = false;
@@ -101,18 +92,32 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     return this.forgotPasswordForm.controls;
   }
 
+  get cn2(){
+    return this.forgotPasswordResetForm.controls;
+  }
+
+  closeInfoModal(data:any){
+    console.log("closeInfoModal",data);
+    this.infoModal = {show : false};
+  }
+
+  formStatus(){
+    console.log("formStatus",this.cn);
+  }
+
   submitForgotPasswordResetForm(val:any){
-    if(this.forgotPasswordForm.status == 'INVALID') return;
-    this._auth.forgotPasswordReset(this.forgotPasswordForm.value).subscribe({
+    if(this.forgotPasswordResetForm.status == 'INVALID') return;
+    let obj = {email: this.email, resetSecret: this.resetSecret, ...this.forgotPasswordResetForm.value}
+    this._auth.forgotPasswordReset(obj).subscribe({
       next: (w:any)=>{
         this._cs.openSnackBar("Signed Up", "Success");
         this.isForgotPasswordSubmitted = true;
         this.infoModal = {
           show: true,
-          title: `Account Password ForgotPassword successful for ${this.forgotPasswordForm.value.email}`,
+          title: `Account Password ForgotPassword successful for ${this.email}`,
           message: `Please goto login page to signin with new password`,
           infoModalType: "standard",
-          actions: 'close'
+          actions: 'redirect'
         }
       },
       error: (err:any)=>{
