@@ -21,6 +21,7 @@ export class ResetComponent implements OnInit {
   passIsVisible:boolean=true;
   passIsVisible2:boolean=true;
   passwordMatch: boolean = false;
+  processReset: boolean = false;
 
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _r2: Renderer2) { }
 
@@ -28,9 +29,10 @@ export class ResetComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetForm = this._fb.group({
+      'email': ['', [Validators.required, Validators.email]],
       'password0' : ['',[Validators.required]],
-      'password' : ['',[Validators.required]],
-      'password2' : ['',[Validators.required]]
+      'password' : ['',[Validators.required, Validators.minLength(6)]],
+      'password2' : ['',[Validators.required, Validators.minLength(6)]]
     });
 
     this.resetForm.valueChanges
@@ -69,6 +71,7 @@ export class ResetComponent implements OnInit {
   }
 
   submitResetForm(val:any){
+    this.processReset = true;
     if(this.resetForm.status == 'INVALID') return;
     this._auth.reset(this.resetForm.value).subscribe({
       next: (w:any)=>{
@@ -80,8 +83,9 @@ export class ResetComponent implements OnInit {
           title: `Account Password Reset successful for ${this.resetForm.value.email}`,
           message: `Please goto login page to signin with new password`,
           infoModalType: "userCreated",
-          actions: 'close'
+          actions: "redirect"
         }
+        this.processReset = false;
       },
       error: (err:any)=>{
         this._cs.openSnackBar(err.error.message, "Error");

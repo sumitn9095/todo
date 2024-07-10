@@ -1,9 +1,15 @@
 <!-- <button type="button" (click)="fetchAll()">Fetch all Categories</button> -->
-<div class="category_wrap">
-    <button [title]="cat.name" class="button " type="button" [categoryRefForTask]="cat.name" *ngFor="let cat of categories">
-        <div class="btn-in"></div>{{cat.name}}<a (click)="categoryRemove(cat._id)"><mat-icon class="btn-in">close</mat-icon></a>
-    </button>
+<app-header [page]="'category'"></app-header>
+<div class="categoryWrapper">
+    <div class="category_wrap">
+        <button [title]="cat.name" class="button btn-category" type="button" [categoryRefForTask]="cat.name" *ngFor="let cat of categories">
+            <div class="btn-in"></div>{{cat.name}}<a (click)="categoryRemove(cat._id, cat.name)"><mat-icon class="btn-in" title="Remove Category">close</mat-icon></a>
+        </button>
+    </div>
+    <div class="flex justify-center">
+        <div class="flex categoryAddWrap">
+            <input type="text" class="mr-3" value="" [(ngModel)]="categoryInp" placeholder="category">
+            <button mat-stroked-button color="primary" type="button" title="Add Category" (click)="categoryAdd()">Add Category</button>
+        </div>
+    </div>
 </div>
-
-<input type="text" value="" [(ngModel)]="categoryInp" placeholder="category">
-<button type="button" (click)="categoryAdd()">Add Category</button>

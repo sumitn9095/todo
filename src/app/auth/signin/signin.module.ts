@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SigninRoutingModule,
     FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatCardModule,
-    MatButtonModule, MatInputModule,
+    MatButtonModule, MatInputModule, MatIconModule,
     MatSnackBarModule, SharedModule
   ]
 })

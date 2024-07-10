@@ -172,7 +172,7 @@ downloadChart(sd:any) {
   // --------------- Category --------------
   fetchUserCategories(){
     let obj = {
-      email : this.user.email
+      email : this.user !== null && this.user.email !== null ? this.user.email : ''
     }
     return this._http.post<any>(`${this.uri}${UrlConstants.userCategories}`,obj);
   }

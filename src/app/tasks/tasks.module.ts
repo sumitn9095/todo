@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TasksRoutingModule } from './tasks-routing.module';
 import { TasksComponent, TaskDetails } from './tasks.component';
 // import { ListComponent } from './list/list.component';
-import { CreateComponent } from './create/create.component';
+// import { CreateComponent } from './create/create.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { ListOverComponent } from './list-over/list-over.component';
 import { SharedModule } from '../shared/shared.module';
@@ -31,7 +31,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     TasksComponent,
     TaskDetails,
     // ListComponent,
-    CreateComponent,
     // ListOverComponent,
     SearchComponent,
     MyLineChartComponent,

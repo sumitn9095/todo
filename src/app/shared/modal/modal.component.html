@@ -6,7 +6,7 @@ userCreated
 userVerified -->
 
 <div class="modale opened show-{{infoModal.show}} error-{{infoModal.error}}">
-    <div class="modal-dialog">
+    <div class="modal-dialog {{infoModal.infoModalType === 'chart' ? 'size-lg' : ''}}">
         <div class="modal-header">
             <ng-content select="header"></ng-content>
         </div>

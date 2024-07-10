@@ -1,4 +1,5 @@
-<div class="header-bar">
+<app-header [page]="'task'" (tasklist_create)="taskListHandle()" (taskCountError)="checkTaskCountError($event)" (signOutEvent)="signOut()" (openChartModalEvent)="openChartModal()"></app-header>
+<!-- <div class="header-bar">
   <mat-toolbar color="primary">
     <div class="task-bar-logo">
         <h2>Tasks:ToDo</h2>
@@ -16,12 +17,8 @@
           <mat-icon>show_chart</mat-icon>
         </button>
     </div>
-    <!-- <button mat-icon-button class="example-icon" title="Bar Chart" (click)="openChartBar(userData)"
-      aria-label="icon-button with bar_chart icon">
-      <mat-icon>bar_chart</mat-icon>
-    </button> -->
   </mat-toolbar>
-</div>
+</div> -->
 
 <div [categoryRefForTask]="''" class="tasks_main" *ngIf="tasks_loaded == 'success'; else tasks_not_loaded">
     <div class="container">
@@ -35,7 +32,7 @@
               <a (click)="categoryCapitalized = '';navigateToTasks()" class="cursor-pointer"><span *ngIf="categoryCapitalized !== ''" class="material-icons">keyboard_arrow_left</span></a>
               <mat-form-field appearance="fill">
                 <mat-label>Categories</mat-label>
-                <mat-select #categoryInp (selectionChange)="viewCategory($event)" [(value)]="categoryCapitalized">
+                <mat-select #categoryInp *ngIf="categories !== undefined && categories.data !== undefined" (selectionChange)="viewCategory($event)" [(value)]="categoryCapitalized">
                   <mat-option [value]="null" >Select</mat-option>
                   <mat-option *ngFor="let cat of categories.data" [value]="cat.name">{{cat.name}}</mat-option>
                 </mat-select>
@@ -57,7 +54,7 @@
       <div class="container">
         <div *ngIf="!contentLoading; else placeholder">
           <div class="task-row" class="{{tasks_today.length <= 0 ? 'empty' : ''}}">
-            <h4>Today</h4>
+            <h4>Today / New</h4>
             <app-task-template  *ngIf="tasks_today.length; else no_tasks_today" [tasklist]="tasks_today" [isList]="'today'" (taskId)="checkDetailsById($event)"  (taskUpdate)="getUserTasks()"></app-task-template>
             <ng-template class="" #no_tasks_today >No Tasks Due Today</ng-template>
           </div>

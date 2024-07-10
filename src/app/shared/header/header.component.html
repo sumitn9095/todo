@@ -1,8 +1,43 @@
-<div class="header-bar">
-    <mat-toolbar color="primary">
-      <div class="task-bar-logo">
-          <h2>Tasks:ToDo</h2>
-      </div>
-      <div></div>
-    </mat-toolbar>
+<div class="header-bar {{page !== 'task' ? 'non-task-pages' : ''}}">
+  <mat-toolbar color="primary">
+    <div class="task-bar-logo">
+        <h2>Tasks:ToDo</h2>
+    </div>
+    <div class="container" *ngIf="page === 'task'">
+      <app-create class="" (tasklist_create)="taskListHandle()" (taskCountError)="checkTaskCountError($event)"></app-create>
+    </div>
+    <div class="task-bar-actions flex">
+        <div class="menuWrap">
+              <button mat-icon-button class="example-icon" type="button" title="Menu" (click)="menuListAppear()"
+                aria-label="icon-button with show_chart icon">
+                <mat-icon>menu</mat-icon>
+              </button>
+              <ng-template [ngIf]="menuOpen">
+                <div #menuDropdown class="menuListWrap animate__animated">
+                  <mat-list *ngIf="page !== ''" class=" menuWrapList">
+                      <mat-list-item><button (click)="navigateTo('./auth/reset')">Reset</button></mat-list-item>
+                      <mat-list-item *ngIf="page === 'category'"><button (click)="navigateTo('tasks')">Tasks</button></mat-list-item>
+                      <mat-list-item *ngIf="page === 'task'"><button (click)="navigateTo('category')">Category</button></mat-list-item>
+                      <mat-list-item><button (click)="navigateTo('./auth/signout')">Sign Out</button></mat-list-item>
+                  </mat-list>
+                  <mat-list *ngIf="page === ''" class=" menuWrapList">
+                    <mat-list-item><button (click)="navigateTo('./auth/signin')">Sign In</button></mat-list-item>
+                    <mat-list-item><button (click)="navigateTo('./auth/signup')">Sign Up</button></mat-list-item>
+                    <mat-list-item><button (click)="navigateTo('./auth/forgot-password')">Forgot Password</button></mat-list-item>
+                    <mat-list-item><button (click)="navigateTo('./auth/reset')">Account Reset</button></mat-list-item>
+                  </mat-list>
+              </div>
+            </ng-template>
+        </div>
+        <!-- <button mat-icon-button class="example-icon" type="button" title="Line Chart" (click)="signOut()"
+          aria-label="icon-button with show_chart icon">
+          <mat-icon>person</mat-icon>
+        </button> -->
+        <button mat-icon-button  *ngIf="page === 'task'" class="example-icon" type="button" title="Line Chart" (click)="openChartModal()"
+          aria-label="icon-button with show_chart icon">
+          <mat-icon>show_chart</mat-icon>
+        </button>
+    </div>
+   
+  </mat-toolbar>
 </div>

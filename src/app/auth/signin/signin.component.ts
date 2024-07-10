@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,11 +17,17 @@ export class SigninComponent implements OnInit {
   public signInForm! : FormGroup;
   infoModal: Infomodal = {};
   isForgetPasswordResetMode:boolean=false;
-  constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _ar: ActivatedRoute) { }
+  passIsVisible: boolean = false;
+  processSignIn : boolean = false;
+
+  constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _ar: ActivatedRoute, private _r2: Renderer2) { }
+
+  @ViewChild ('passdiv') passdiv! : ElementRef;
+
   ngOnInit(): void {
     this.signInForm = this._fb.group({
       'email' : ['',[Validators.required, Validators.email]],
-      'password' : ['',[Validators.required]]
+      'password' : ['',[Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -36,19 +42,15 @@ export class SigninComponent implements OnInit {
   }
 
   forgotPassword(){
-    this.infoModal = {
-      show: true,
-      title: `Forgot Password`,
-      message: `Do you wish to reset your account password, via 'Forgot Password'?`,
-      infoModalType: "userCreated",
-      actions: 'close'
-    }
+    this._router.navigate(['./auth/forgot-password']);
   }
 
   submitSignInForm(val:any){
+    this.processSignIn = true;
     if(this.signInForm.status == 'INVALID') return;
     this._auth.signIn(this.signInForm.value).subscribe({
       next: (w:any)=>{
+        this.processSignIn = false;
         sessionStorage.setItem('user',JSON.stringify(w.user));
         sessionStorage.setItem('todo_token', w.token);
         setTimeout(() => {
@@ -58,6 +60,10 @@ export class SigninComponent implements OnInit {
       },
       error: (err:any)=>{
         this._cs.openSnackBar(err?.error.message, "Error");
+        this._r2.addClass(this.passdiv.nativeElement,"animate__shakeX");
+        setTimeout(() => {
+          this._r2.removeClass(this.passdiv.nativeElement,"animate__shakeX");
+        }, 1000);
       }
     })
   }

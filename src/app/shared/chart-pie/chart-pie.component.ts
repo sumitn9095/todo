@@ -162,9 +162,13 @@ export class ChartPieComponent implements OnInit {
 
   updateSetting_type(data:any){
     console.log("updateSetting_type",data);
-    this.chart.clear();
-    this.chart.destroy();
+   
     setTimeout(() => {
+      if(this.chart !== undefined){
+        this.chart.clear();
+        this.chart.destroy();
+      }
+
         if(data.value == 1) this.createPieChart();
         if(data.value == 2) this.createBarChart();
 

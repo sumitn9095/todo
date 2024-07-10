@@ -1,24 +1,30 @@
 <app-header></app-header>
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+<div  #passdiv class="login-wrapper animate__animated" fxLayout="row" fxLayoutAlign="center center">
     <mat-card class="box">
       <mat-card-header class="login-title">
         <mat-card-title >Log In</mat-card-title>
       </mat-card-header>
-      <form class="example-form" [formGroup]="signInForm" (ngSubmit)="submitSignInForm($event)">
+      <form class="example-form auth-form" [formGroup]="signInForm" (ngSubmit)="submitSignInForm($event)">
         <mat-card-content>
           <div class="login-box">
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Email" formControlName="email" >
-              <mat-error [hidden]="cn['email'].status == 'VALID'">Email is required</mat-error>
+              <mat-error *ngIf="cn['email'].errors?.['required']">Email is required.</mat-error>
+                <mat-error *ngIf="cn['email'].errors?.['email'] && cn['email'].touched">Invalid email format.</mat-error>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Password" formControlName="password">
-              <mat-error [hidden]="cn['password'].status == 'VALID'">Password is required</mat-error>
+              <input matInput placeholder="Password"  [type]="passIsVisible ? 'text' : 'password'" formControlName="password">
+              <mat-icon *ngIf="passIsVisible" (click)="passIsVisible = false" matSuffix>visibility</mat-icon>
+              <mat-icon *ngIf="!passIsVisible" (click)="passIsVisible = true" matSuffix>visibility_off</mat-icon>
+              <mat-error *ngIf="cn['password'].errors?.['required']">Password is required.</mat-error>
+              <mat-error *ngIf="cn['password'].errors?.['minlength'] && cn['password'].touched">Password too short</mat-error>
             </mat-form-field>
           </div>
         </mat-card-content>
-        <button title="Signup" type="submit" mat-stroked-button color="accent" class="btn-block">Log In</button>
-        <a (click)="forgotPassword()">Forgot Password</a>
+        <mat-card-actions>
+          <button title="Navigate To Forgot Passwrd" type="button" mat-button color="link" (click)="forgotPassword()">Forgot Password</button>
+          <button title="Signup" type="submit" mat-button color="primary" class="{{processSignIn ? 'processing' : ''}}">Log In</button>
+        </mat-card-actions>
       </form>
     </mat-card>
   </div>

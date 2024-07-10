@@ -20,6 +20,7 @@ export class SignupComponent implements OnInit {
   passIsVisible:boolean=true;
   passIsVisible2:boolean=true;
   passwordMatch: boolean = false;
+  processSignUp: boolean = false;
 
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _r2: Renderer2) { }
 
@@ -29,8 +30,8 @@ export class SignupComponent implements OnInit {
     this.signUpForm = this._fb.group({
       'username' : ['',[Validators.required, Validators.maxLength(60), Validators.minLength(3)]],
       'email' : ['',[Validators.required, Validators.email]],
-      'password' : ['',[Validators.required]],
-      'password2' : ['',[Validators.required]]
+      'password' : ['',[Validators.required, Validators.minLength(6)]],
+      'password2' : ['',[Validators.required, Validators.minLength(6)]]
     });
 
     this.signUpForm.valueChanges
@@ -83,6 +84,7 @@ export class SignupComponent implements OnInit {
   }
 
   submitSignUpForm(val:any){
+    this.processSignUp = true;
     if(this.signUpForm.status == 'INVALID') return;
     this._auth.signUp(this.signUpForm.value).subscribe({
       next: (w:any)=>{
@@ -96,6 +98,7 @@ export class SignupComponent implements OnInit {
           infoModalType: "userCreated",
           actions: 'close'
         }
+        this.processSignUp = false;
       },
       error: (err:any)=>{
         this._cs.openSnackBar(err.error.message, "Error");

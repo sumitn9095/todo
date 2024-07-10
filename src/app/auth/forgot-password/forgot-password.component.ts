@@ -23,6 +23,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   passwordMatch: boolean = false;
   email:string='';
   resetSecret:string='';
+  processForgotPassword : boolean = false;
 
   constructor(private _cs : CommonService, private _auth: AuthService, private _fb : FormBuilder, private _snackBar : MatSnackBar, private _router : Router, private _r2: Renderer2, private _ar : ActivatedRoute) { }
 
@@ -84,6 +85,17 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
             this._r2.removeClass(this.passdiv.nativeElement,"animate__shakeX");
           }, 1000);
         }
+        
+      }, 
+      error: (err:any)=>{
+        this._cs.openSnackBar(err?.error.message, "Error");
+        this._r2.addClass(this.passdiv.nativeElement,"animate__shakeX");
+        setTimeout(() => {
+          this._r2.removeClass(this.passdiv.nativeElement,"animate__shakeX");
+        }, 3000);
+      },
+      complete: ()=>{
+        
       }
     })
   }
@@ -121,13 +133,18 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
         }
       },
       error: (err:any)=>{
-        this._cs.openSnackBar(err.error.message, "Error");
-      }
+        this._cs.openSnackBar(err?.error.message, "Error");
+        this._r2.addClass(this.passdiv.nativeElement,"animate__shakeX");
+        setTimeout(() => {
+          this._r2.removeClass(this.passdiv.nativeElement,"animate__shakeX");
+        }, 3000);
+      },
     })
   }
 
 
   submitForgotPasswordForm(val:any){
+    this.processForgotPassword = true;
     if(this.forgotPasswordForm.status == 'INVALID') return;
     this._auth.forgotPassword(this.forgotPasswordForm.value).subscribe({
       next: (w:any)=>{
@@ -138,12 +155,15 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
           message: `Please goto to your email, and click the link given to reset your Account Password.`,
           actions: "redirect"
         };
+        this.processForgotPassword = false;
       },
       error: (err:any)=>{
-        this.infoModal = this._cs.openModal('error');
-        this.infoModal.title= `Error`;
-        this.infoModal.message=`Some Error occured`;
-      }
+        this._cs.openSnackBar(err?.error.message, "Error");
+        this._r2.addClass(this.passdiv.nativeElement,"animate__shakeX");
+        setTimeout(() => {
+          this._r2.removeClass(this.passdiv.nativeElement,"animate__shakeX");
+        }, 3000);
+      },
     });
   }
 }

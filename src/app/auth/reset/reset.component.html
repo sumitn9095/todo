@@ -7,12 +7,17 @@
       <form class="example-form" [formGroup]="resetForm" (ngSubmit)="submitResetForm($event)">
         <mat-card-content>
             <div class="login-box">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Email" formControlName="email" >
+                  <mat-error *ngIf="cn['email'].errors?.['required']">Email is required.</mat-error>
+                  <mat-error *ngIf="cn['email'].errors?.['email'] && cn['email'].touched">Invalid email format.</mat-error>
+                </mat-form-field>
                 <mat-form-field class="!block width-fluid">
                     <input matInput placeholder="Password" [type]="passIsVisible0 ? 'text' : 'password'" formControlName="password0">
                     <mat-icon *ngIf="passIsVisible0" (click)="passIsVisible0 = false" matSuffix>visibility</mat-icon>
                     <mat-icon *ngIf="!passIsVisible0" (click)="passIsVisible0 = true" matSuffix>visibility_off</mat-icon>
                     <!-- <mat-icon *ngIf="!passIsVisible0" matSuffix>visibility_off</mat-icon> -->
-                    <mat-error [hidden]="cn['password'].status == 'VALID'">Password is required</mat-error>
+                    <mat-error *ngIf="cn['password0'].errors?.['required']">Password is required</mat-error>
                 </mat-form-field>
               <div #passdiv class="width-fluid animate__animated">
                 <mat-form-field class="!block width-fluid">
@@ -20,21 +25,23 @@
                   <mat-icon *ngIf="passIsVisible" (click)="passIsVisible = false" matSuffix>visibility</mat-icon>
                   <mat-icon *ngIf="!passIsVisible" (click)="passIsVisible = true" matSuffix>visibility_off</mat-icon>
                   <!-- <mat-icon *ngIf="!passIsVisible" matSuffix>visibility_off</mat-icon> -->
-                  <mat-error [hidden]="cn['password'].status == 'VALID'">Password is required</mat-error>
+                  <mat-error *ngIf="cn['password'].errors?.['required']">Password is required</mat-error>
+                  <mat-error *ngIf="cn['password'].errors?.['minlength'] && cn['password'].touched">Password too short</mat-error>
                 </mat-form-field>
                 <mat-form-field class="!block width-fluid">
                   <input matInput placeholder="Confirm Password" [type]="passIsVisible2 ? 'text' : 'password'" formControlName="password2">
                   <mat-icon *ngIf="passIsVisible2" (click)="passIsVisible2 = false" matSuffix>visibility</mat-icon>
                   <mat-icon *ngIf="!passIsVisible2" (click)="passIsVisible2 = true" matSuffix>visibility_off</mat-icon>
                   <!-- <mat-icon *ngIf="!passIsVisible2" matSuffix>visibility_off</mat-icon> -->
-                  <mat-error [hidden]="cn['password2'].status == 'VALID'">Password is required</mat-error>
+                  <mat-error *ngIf="cn['password2'].errors?.['required']">Password is required</mat-error>
+                  <mat-error *ngIf="cn['password2'].errors?.['minlength'] && cn['password2'].touched">Password too short</mat-error>
                 </mat-form-field>
               </div>
             </div>
         </mat-card-content>
         <!-- <a (click)="formStatus()">Status</a>
         {{passwordMatch}}--passwordMatch -->
-        <button title="Signup" type="submit" [disabled]="cn['username'].status !== 'VALID' || cn['email'].status !== 'VALID' || (cn['password'].value === '') && (cn['password2'].value === '') || !passwordMatch" mat-stroked-button color="accent" class="btn-block">Reset</button>
+        <button title="Signup" type="submit" [disabled]="(cn['password'].status === 'INVALID') && (cn['password2'].status === 'INVALID') || !passwordMatch" mat-stroked-button color="accent" class="btn-block {{processReset? 'processing' : ''}}">Reset</button>
       </form>
     </mat-card>
     <div *ngIf="isResetSubmitted">
