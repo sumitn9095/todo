@@ -48,6 +48,7 @@ export class SigninComponent implements OnInit {
   submitSignInForm(val:any){
     this.processSignIn = true;
     if(this.signInForm.status == 'INVALID') return;
+    this._cs.openSnackBarNoDuration("Loading...", "Success");
     this._auth.signIn(this.signInForm.value).subscribe({
       next: (w:any)=>{
         this.processSignIn = false;

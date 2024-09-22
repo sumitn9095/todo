@@ -73,6 +73,7 @@ export class ResetComponent implements OnInit {
   submitResetForm(val:any){
     this.processReset = true;
     if(this.resetForm.status == 'INVALID') return;
+    this._cs.openSnackBarNoDuration("Loading...", "Success");
     this._auth.reset(this.resetForm.value).subscribe({
       next: (w:any)=>{
         this.isResetSubmitted = true;

@@ -119,6 +119,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
 
   submitForgotPasswordResetForm(val:any){
     if(this.forgotPasswordResetForm.status == 'INVALID') return;
+    this._cs.openSnackBarNoDuration("Loading...", "Success");
     let obj = {email: this.email, resetSecret: this.resetSecret, ...this.forgotPasswordResetForm.value}
     this._auth.forgotPasswordReset(obj).subscribe({
       next: (w:any)=>{
@@ -146,6 +147,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   submitForgotPasswordForm(val:any){
     this.processForgotPassword = true;
     if(this.forgotPasswordForm.status == 'INVALID') return;
+    this._cs.openSnackBarNoDuration("Loading...", "Success");
     this._auth.forgotPassword(this.forgotPasswordForm.value).subscribe({
       next: (w:any)=>{
         this.infoModal = {

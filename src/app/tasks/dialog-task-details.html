@@ -1,5 +1,5 @@
 <div mat-dialog-title class="dialog-title-bar">
-  <h2 class="dialog">Task Details
+  <h2 class="dialog position-relative">Task Details
     <a href="javascript:;" mat-dialog-close class="dialog-close-btn">
       <mat-icon>close</mat-icon>
     </a>
@@ -10,22 +10,26 @@
     <div class="!w-full mb-18">
       <!-- <mat-form-field appearance="fill" class="!w-full">
         <mat-label>Task Photo</mat-label> -->
-        <!-- <input  #task_inp_photo title="Task Name" type="file" (change)="handleTaskPhoto($event)"  > -->
-        <input title="Upload Task Photo" type="file" id="browse_btn_img" (change)="handleTaskPhoto($event)" value="Browse" />
-        <!-- <file-upload [(ngModel)]="taskPhoto" (change)="handleTaskPhoto($event)"  name="files" fileslimit="1"></file-upload> -->
+      <!-- <input  #task_inp_photo title="Task Name" type="file" (change)="handleTaskPhoto($event)"  > -->
+      <input title="Upload Task Photo" type="file" id="browse_btn_img" (change)="handleTaskPhoto($event)"
+        value="Browse" />
+      <!-- <file-upload [(ngModel)]="taskPhoto" (change)="handleTaskPhoto($event)"  name="files" fileslimit="1"></file-upload> -->
       <!-- </mat-form-field> -->
     </div>
     <div class="!w-full">
       <mat-form-field appearance="fill" class="!w-full">
         <mat-label>TaskName</mat-label>
-        <input matInput #task_inp_name title="Task Name" type="text" formControlName="taskname" [(ngModel)]="data?.taskDetails.taskname" >
+        <input matInput #task_inp_name title="Task Name" type="text" formControlName="taskname"
+          [(ngModel)]="data?.taskDetails.taskname">
       </mat-form-field>
     </div>
     <div class="!w-full">
       <mat-form-field appearance="fill" class="!w-full">
         <mat-label>Task Due Date</mat-label>
         <mat-date-range-input [rangePicker]="picker" [min]="data?.taskDetails.date">
-          <input matStartDate placeholder="Start date" formControlName="startDate" [defaultValue]="data?.taskDetails.date" [(ngModel)]="data?.taskDetails.date" [(value)]="data?.taskDetails.date" >
+          <input matStartDate placeholder="Start date" formControlName="startDate"
+            [defaultValue]="data?.taskDetails.date" [(ngModel)]="data?.taskDetails.date"
+            [(value)]="data?.taskDetails.date">
           <input matEndDate placeholder="End date" formControlName="dueDate" [(ngModel)]="data?.taskDetails.dueDate">
         </mat-date-range-input>
         <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
@@ -35,7 +39,8 @@
     </div>
     <div class="!w-full mb-18">
       <mat-label>Task Priority</mat-label>
-      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="priority"   [(ngModel)]="data?.taskDetails.priority" >
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="priority"
+        [(ngModel)]="data?.taskDetails.priority">
         <mat-button-toggle [value]="0">Small</mat-button-toggle>
         <mat-button-toggle [value]="1">Medium</mat-button-toggle>
         <mat-button-toggle [value]="2">High</mat-button-toggle>
@@ -43,32 +48,25 @@
     </div>
     <div class="!w-full mb-18">
       <mat-label>Task Is Over</mat-label>
-      <mat-button-toggle-group  name="fontStyle" aria-label="Font Style" formControlName="isOver" [(ngModel)]="data?.taskDetails.isOver">
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="isOver"
+        [(ngModel)]="data?.taskDetails.isOver">
         <mat-button-toggle [value]="true">Done</mat-button-toggle>
         <mat-button-toggle [value]="false">Resume</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="!w-full">
-      <mat-form-field class="example-chip-list" appearance="fill"  class="!w-full">
+      <mat-form-field class="example-chip-list" appearance="fill" class="!w-full">
         <mat-label>Category association</mat-label>
-        <mat-chip-list #chipList aria-label="Fruit selection" >
-          <mat-chip
-            *ngFor="let category of fruits"
-            (removed)="remove(category)">
+        <mat-chip-list #chipList aria-label="Fruit selection">
+          <mat-chip *ngFor="let category of fruits" (removed)="remove(category)">
             {{category}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
-          <input
-            placeholder="Add Category"
-            #fruitInput
-            [formControl]="fruitCtrl"
-            [matAutocomplete]="auto"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            >
-            <!-- (matChipInputTokenEnd)="add($event)" -->
+          <input placeholder="Add Category" #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+          <!-- (matChipInputTokenEnd)="add($event)" -->
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
           <mat-option *ngFor="let category of data?.taskDetails.categories" [value]="category.name">
@@ -80,8 +78,8 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-raised-button type="submit" class="btn btn-primary" color="primary" [disabled]="taskDetailsForm.status === 'INVALID'"
-    [mat-dialog-close]="data">
+  <button mat-raised-button type="submit" class="btn btn-primary" color="primary"
+    [disabled]="taskDetailsForm.status === 'INVALID'" [mat-dialog-close]="data">
     Submit
   </button>
   <button mat-raised-button type="button" class="btn btn-danger m-l-10" (click)="onNoClick()">Cancel</button>

@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Infomodal } from 'src/app/utility/infomodal';
+import { CommonService } from 'src/app/common.service';
 
 @Component({
   selector: 'app-verify',
@@ -16,7 +17,7 @@ export class VerifyComponent implements OnInit, AfterViewInit {
   verificationMessage : string | null = '';
   infoModal: Infomodal = {};
 
-  constructor(private _ar : ActivatedRoute, private _auth: AuthService, private _router: Router) { }
+  constructor(private _cs : CommonService, private _ar : ActivatedRoute, private _auth: AuthService, private _router: Router) { }
 
   ngOnInit(): void {
     // this._ar.params.subscribe((params: Params)=>{
@@ -27,6 +28,7 @@ export class VerifyComponent implements OnInit, AfterViewInit {
 
  ngAfterViewInit(): void {
   this.infoModal = {show: true};
+  this._cs.openSnackBarNoDuration("Loading...", "Success");
   this.verificationMessage = 'User verification in progress';
     this._ar.params.subscribe((params: Params)=>{
       let email = params['email'];

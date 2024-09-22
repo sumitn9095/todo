@@ -14,6 +14,9 @@ export class CommonService {
       duration: CommonConstants.snack_bar_expiry,
     });
   }
+  openSnackBarNoDuration(message: string, action?: string) {
+    this._snackBar.open(message, action);
+  }
 
   openModal(modalType:string) {
     switch (modalType) {
