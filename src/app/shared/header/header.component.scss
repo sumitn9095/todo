@@ -1,34 +1,41 @@
 .header-bar {
-    // position: absolute;
-    // left: 0;
-    // right: 0;
-    &.non-task-pages {
-        mat-toolbar {
-            position: absolute;
-            height: 56px;
-        }
-    }
+
+  // position: absolute;
+  // left: 0;
+  // right: 0;
+  &.non-task-pages {
     mat-toolbar {
-        height: 101px;
+      position: absolute;
+      height: 76px;
     }
+  }
+
+  mat-toolbar {
+    height: 101px;
+  }
 }
 
 .menuWrap {
-    position: relative;
-    .menuWrapList {
-        position: absolute;
-        right: 0;
-        mat-list-item {
-            &:hover {
-                background-color: #f4efef;
-                &:last-child {
-                    border-radius: 0 0 8px 8px;
-                }
-                &:first-child {
-                    border-radius: 8px 8px 0 0;
-                }
-            }
+  position: relative;
+
+  .menuWrapList {
+    position: absolute;
+    right: 0;
+
+    mat-list-item {
+      &:hover {
+        background-color: #f4efef;
+
+        &:last-child {
+          border-radius: 0 0 8px 8px;
         }
-        // margin-top: 20px;
+
+        &:first-child {
+          border-radius: 8px 8px 0 0;
+        }
+      }
     }
+
+    // margin-top: 20px;
+  }
 }

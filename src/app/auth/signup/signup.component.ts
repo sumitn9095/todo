@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from 'src/app/common.service';
 import { Router } from '@angular/router';
 import { Infomodal } from 'src/app/utility/infomodal';
-import { confirmPasswordValidator } from './confirm-password.validator';
+// import { confirmPasswordValidator } from './confirm-password.validator';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({

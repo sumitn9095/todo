@@ -7,7 +7,7 @@ import { CommonService } from '../common.service';
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
-  public categoryInp:any;
+  //public categoryInp:any;
   public categories:Array<any>=[];
   constructor(private _task : TasksService, private _cs : CommonService) { }
   // @ViewChild('categoryInp') 'categoryInp' : ElementRef;
@@ -26,9 +26,10 @@ export class CategoryComponent implements OnInit {
     })
   }
 
-  categoryAdd() {
+  categoryAdd(categoryName:any) {
+    if(categoryName === '') return;
     let obj = {
-      name: this.categoryInp,
+      name: categoryName,
       priority: 2
     }
     this._task.category_add(obj).subscribe({
@@ -36,7 +37,7 @@ export class CategoryComponent implements OnInit {
         console.log("Category-Add",w);
         console.log(obj);
         this.fetchAll();
-        this._cs.openSnackBar(`Category Added : ${this.categoryInp}`, "Success");
+        this._cs.openSnackBar(`Category Added : ${categoryName}`, "Success");
       },
       error: (err:any)=>{
         var errMessage='';

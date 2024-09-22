@@ -24,8 +24,8 @@ const routes: Routes = [
   { path: 'hobby', loadChildren: () => import('./hobby/hobby.module').then(m => m.HobbyModule) },
   { path: 'category', loadChildren: () => import('./category/category.module').then(m => m.CategoryModule), canActivate: [AuthGuard] },
   { path: 'test', loadChildren: ()=>import('./test/test.module').then(m => m.TestModule)},
-  { path: 'ngxs-demo', loadChildren: () => import('./ngxs-demo/ngxs-demo.module').then(m => m.NgxsDemoModule) },
-  { path: 'ngxs-api-demo', loadChildren: () => import('./ngxs-api-demo/ngxs-api-demo.module').then(m => m.NgxsApiDemoModule) },
+  // { path: 'ngxs-demo', loadChildren: () => import('./ngxs-demo/ngxs-demo.module').then(m => m.NgxsDemoModule) },
+  // { path: 'ngxs-api-demo', loadChildren: () => import('./ngxs-api-demo/ngxs-api-demo.module').then(m => m.NgxsApiDemoModule) },
   // { path: 'change-detection-with-signal', loadChildren: ()=>import('./change-detection-with-signal/change-detection-with-signal.component').then(m => m.ChangeDetectionWithSignalComponent)}
 ];
 

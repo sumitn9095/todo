@@ -9,7 +9,7 @@ import { Infomodal } from 'src/app/utility/infomodal';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-reset',
   templateUrl: './reset.component.html',
   styleUrls: ['./reset.component.scss']
 })

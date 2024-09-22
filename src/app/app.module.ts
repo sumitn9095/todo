@@ -13,6 +13,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { TaskApiState } from './shared/task.state';
+import { MatToolbarModule } from '@angular/material/toolbar';
 // import { ChildComponent } from './change-detection-with-signal/child/child.component';
 // import { SharedModule } from './shared/shared.module'
 @NgModule({
@@ -24,11 +25,12 @@ import { TaskApiState } from './shared/task.state';
     BrowserAnimationsModule,
     MatNativeDateModule,
     MatSnackBarModule,
+    MatToolbarModule,
     NgxsModule.forRoot([
       TaskApiState
     ]),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
-    NgxsLoggerPluginModule.forRoot()
+    //NgxsReduxDevtoolsPluginModule.forRoot(),
+    //NgxsLoggerPluginModule.forRoot()
     //SharedModule
   ],
   // exports: [ChildComponent],

@@ -8,7 +8,7 @@ import { Infomodal } from 'src/app/utility/infomodal';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-forgotpassword',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })
